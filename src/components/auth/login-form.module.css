@@ -1,0 +1,78 @@
+/* src/pages/LoginPage.module.css */
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 16px;
+  background-color: #ffe4ec;
+  min-height: 80vh;
+}
+
+.loginBox {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #888;
+}
+
+.pigIcon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 24px;
+  font-weight: bold;
+  color: #ff7ca8;
+}
+
+.inputField {
+  margin-bottom: 16px;
+}
+
+.linkRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.orDivider {
+  margin: 16px 0;
+  color: #aaa;
+}
+
+.socialLoginBtn {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.kakao {
+  background-color: #fee500;
+  color: #000;
+}
+
+.naver {
+  background-color: #03c75a;
+  color: #fff;
+}
