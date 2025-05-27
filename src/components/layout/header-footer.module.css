@@ -1,0 +1,36 @@
+/* src/components/HeaderFooter.module.css */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: white;
+  border-bottom: 2px solid #f5c1d1;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff5a8a;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.logoutButton {
+  background-color: #ffacc8 !important;
+  color: white !important;
+  border-radius: 16px !important;
+}
+
+.footer {
+  padding: 16px;
+  text-align: center;
+  background-color: #fff0f5;
+  color: #888;
+  font-size: 14px;
+}
