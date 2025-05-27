@@ -3,12 +3,12 @@ import { Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import styles from "./header-footer.module.css";
+import styles from "./headerFooter.module.css";
 
 export default function Header() {
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>🐷짠예살롱</div>
+      <div className={styles.logo}>🐷예삐룩</div>
       <nav className={styles.nav}>
         <Button startIcon={<HomeIcon />}>홈</Button>
         <Button startIcon={<ChatBubbleIcon />}>다이어트</Button>
