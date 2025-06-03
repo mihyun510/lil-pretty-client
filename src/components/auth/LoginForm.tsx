@@ -2,7 +2,7 @@
 import { TextField, IconButton, InputAdornment } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
-import styles from "./login-form.module.css";
+import styles from "./LoginForm.module.css";
 
 export default function LoginForm() {
   return (

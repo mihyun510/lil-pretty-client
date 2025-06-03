@@ -4,20 +4,38 @@ import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import styles from "./headerFooter.module.css";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Header() {
+  const { isLoggedIn, setLoggedIn } = useAuthStore();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    setLoggedIn(false);
+    // 페이지 이동이나 리프레시도 여기에 추가 가능
+  };
+
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>🐷예삐룩</div>
+      <div className={styles.logo}>🐷짠예살롱</div>
       <nav className={styles.nav}>
-        <Button startIcon={<HomeIcon />}>홈</Button>
-        <Button startIcon={<ChatBubbleIcon />}>다이어트</Button>
-        <Button startIcon={<FavoriteIcon />}>데이트</Button>
-        <Button>후기글</Button>
-        <Button>로그인</Button>
-        <Button variant="contained" className={styles.logoutButton}>
-          로그아웃
-        </Button>
+        {isLoggedIn ? (
+          <>
+            <Button startIcon={<HomeIcon />}>홈</Button>
+            <Button startIcon={<ChatBubbleIcon />}>다이어트</Button>
+            <Button startIcon={<FavoriteIcon />}>데이트</Button>
+            <Button>후기글</Button>
+            <Button
+              variant="contained"
+              className={styles.logoutButton}
+              onClick={handleLogout}
+            >
+              로그아웃
+            </Button>
+          </>
+        ) : (
+          <Button>로그인</Button>
+        )}
       </nav>
     </header>
   );

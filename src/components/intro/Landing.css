@@ -1,0 +1,33 @@
+.landing-root {
+  background-color: #ffeef1;
+  min-height: 100vh;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.landing-logo {
+  font-family: "Jua", sans-serif;
+  font-size: 48px;
+  color: #ff6b81;
+  margin-bottom: 32px;
+}
+
+.landing-image-box {
+  background-color: #fff0f5;
+  padding: 16px;
+  border-radius: 20px;
+}
+
+.landing-image {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.landing-text {
+  margin-top: 16px;
+  color: #444;
+}
+
+.landing-footer {
+  margin-top: 32px;
+}
