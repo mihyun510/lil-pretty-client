@@ -1,33 +1,57 @@
 .landing-root {
-  background-color: #ffeef1;
-  min-height: 100vh;
-  padding-top: 40px;
-  text-align: center;
-}
-
-.landing-logo {
-  font-family: "Jua", sans-serif;
-  font-size: 48px;
-  color: #ff6b81;
-  margin-bottom: 32px;
-}
-
-.landing-image-box {
-  background-color: #fff0f5;
-  padding: 16px;
-  border-radius: 20px;
-}
-
-.landing-image {
+  position: relative; /* 자식 요소들의 위치 기준점이 됨 */
   width: 100%;
-  border-radius: 12px;
+  height: 80vh; /* 화면 높이 전체 사용 */
+  padding: 0;
+  margin: 0;
+  overflow: hidden; /* 넘치는 이미지 잘라냄 */
+  
+}
+
+.landing-logo-image {
+  position: absolute; /* 원하는 위치에 고정 배치할게요 */
+  top: 30%; /* 위에서 50% 위치로 이동 */
+  left: 50%; /* 왼쪽에서 50% 위치로 이동 */
+  transform: translate(
+    -60%,
+    -50%
+  ); /* 정확히 가운데 정렬 (중심 기준으로 이동) */
+  width: 700px; /* 로고 너비 */
+  height: 500px; /* 곰 이미지 크기 */
+  object-fit: contain;
+  z-index: 2; /* 위에 보이게 설정 */
+}
+
+.landing-bear-image {
+  position: absolute; /* 원하는 위치에 고정 배치할게요 */
+  right: 0; /* 오른쪽 끝에 붙이기 */
+  top: 100px; /* 아래쪽 끝에 붙이기 */
+  height: 640px; /* 곰 이미지 크기 */
+  width: auto;
+  object-fit: contain;
+  z-index: 2; /* 로고보다 뒤에 보이도록 설정 */
+}
+.landing-intro1-image {
+  position: absolute;
+  height: 430px;
+  width: 900px;
+  z-index: 1;
+  right: 500px;
+  top: 40%;
+
+  border-radius: 30px; /* 더 동글동글하게 */
+
+  object-fit: cover;
+  box-shadow: 0 0 25px rgb(208, 155, 174); /* 테두리랑 어울리는 핑크빛 그림자 */
+  transition: transform 0.3s ease, box-shadow 0.5s ease; /* 부드럽게 효과 변화 */
 }
 
 .landing-text {
-  margin-top: 16px;
-  color: #444;
-}
-
-.landing-footer {
-  margin-top: 32px;
+  position: absolute; /* 원하는 위치에 고정 배치 */
+  top: 500px; /* 로고 아래로 550px 내려서 배치 */
+  right: 40%; /* 오른쪽에서 40% 위치 */
+  transform: translateX(-10%); /* 살짝 왼쪽으로 당기기 (미세 조정용) */
+  z-index: 3; /* 이미지 위에 보이도록 설정 */
+  color: #fff; /* 글자 색 흰색 */
+  font-size: 200px; /* 폰트 크기 2배 (기본 1rem의 2배) */
 }
