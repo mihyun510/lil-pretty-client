@@ -5,7 +5,6 @@
   justify-content: center;
   align-items: center;
   padding: 40px 16px;
-  background-color: #ffe4ec;
   min-height: 80vh;
 }
 
@@ -15,7 +14,6 @@
   background-color: white;
   padding: 32px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
 }

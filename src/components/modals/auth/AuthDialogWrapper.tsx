@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import styles from "../../auth/LoginForm.module.css";
 
 interface AuthDialogWrapperProps {
   open: boolean;

@@ -1,12 +1,16 @@
 // src/App.tsx
-import { Layout } from "@/components";
-import { LoginPage, LandingPage } from "@/pages";
+import { Layout, LoginModal, SignupModal } from "@/components";
+import { LandingPage } from "@/pages";
 
 function App() {
   return (
-    <Layout>
-      <LandingPage />
-    </Layout>
+    <>
+      <Layout>
+        <LandingPage />
+      </Layout>
+      <LoginModal />
+      <SignupModal />
+    </>
   );
 }
 

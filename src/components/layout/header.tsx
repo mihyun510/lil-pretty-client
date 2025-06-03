@@ -5,9 +5,11 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import styles from "./headerFooter.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthModalStore } from "@/store/useAuthModalStore";
 
 export default function Header() {
   const { isLoggedIn, setLoggedIn } = useAuthStore();
+  const { openLoginModal } = useAuthModalStore();
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -34,7 +36,7 @@ export default function Header() {
             </Button>
           </>
         ) : (
-          <Button>로그인</Button>
+          <Button onClick={openLoginModal}>로그인</Button>
         )}
       </nav>
     </header>
