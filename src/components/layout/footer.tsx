@@ -1,5 +1,5 @@
 // src/components/Footer.tsx
-import styles from "./header-footer.module.css";
+import styles from "./HeaderFooter.module.css";
 
 export default function Footer() {
   return (

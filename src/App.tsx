@@ -1,11 +1,11 @@
 // src/App.tsx
-import { Layout } from "./components";
-import { LoginPage } from "./pages";
+import { Layout } from "@/components";
+import { LoginPage, LandingPage } from "@/pages";
 
 function App() {
   return (
     <Layout>
-      <LoginPage />
+      <LandingPage />
     </Layout>
   );
 }
