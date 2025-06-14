@@ -64,6 +64,29 @@ export default function SignupForm({
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <TextField
+        sx={{
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+          mb: 1,
+        }}
         name="usNm"
         label="이름"
         fullWidth
@@ -73,6 +96,29 @@ export default function SignupForm({
         onChange={handleChange}
       />
       <TextField
+        sx={{
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+          mb: 1,
+        }}
         name="usId"
         label="아이디"
         fullWidth
@@ -82,6 +128,29 @@ export default function SignupForm({
         onChange={handleChange}
       />
       <TextField
+        sx={{
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+          mb: 1,
+        }}
         name="usPw"
         label="비밀번호"
         type={showPassword ? "text" : "password"}
@@ -101,6 +170,29 @@ export default function SignupForm({
         }}
       />
       <TextField
+        sx={{
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+          mb: 1,
+        }}
         label="비밀번호 확인"
         type={showPasswordConfirm ? "text" : "password"}
         fullWidth
@@ -121,6 +213,29 @@ export default function SignupForm({
         }}
       />
       <TextField
+        sx={{
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+          mb: 1,
+        }}
         name="usEmail"
         label="이메일"
         fullWidth
@@ -130,6 +245,29 @@ export default function SignupForm({
         onChange={handleChange}
       />
       <TextField
+        sx={{
+          mb: 1,
+          width: "350px",
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "#fff0f5", // 연핑크 배경
+            borderRadius: "30px",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f8a6c2", // 테두리
+          },
+          "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "2px solid #f48fb1", // 포커스 테두리
+          },
+          "& .MuiInputLabel-root": {
+            color: "#f48fb1",
+            fontSize: "13px",
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "14px",
+            padding: "12px 18px",
+            color: "#555",
+          },
+        }}
         name="usPhone"
         label="전화번호"
         fullWidth
