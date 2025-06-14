@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* ⬇️ alias 적용 추가 */
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

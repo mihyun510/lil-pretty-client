@@ -1,6 +1,6 @@
 // src/components/SignupModal.tsx
 import AuthDialogWrapper from "./AuthDialogWrapper";
-//import { SignupForm } from "@/components";
+import { SignupForm } from "@/components";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
 
 export default function SignupModal() {
@@ -12,7 +12,7 @@ export default function SignupModal() {
       onClose={closeModal}
       title="회원가입"
     >
-      {/* <SignupForm onSuccess={closeModal} onSwitchToLogin={openLoginModal} /> */}
+      <SignupForm onSuccess={closeModal} onSwitchToLogin={openLoginModal} />
     </AuthDialogWrapper>
   );
 }
