@@ -58,7 +58,7 @@ export default function SignupForm({
   };
 
   useEffect(() => {
-    console.log("변경된 formData:", formData);
+    //console.log("변경된 formData:", formData);
   }, [formData]);
 
   return (
