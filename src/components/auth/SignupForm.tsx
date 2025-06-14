@@ -17,11 +17,11 @@ export default function SignupForm({
   onSwitchToLogin,
 }: SignupFormProps) {
   const [formData, setFormData] = useState<UserRequest>({
-    us_id: "",
-    us_pw: "",
-    us_nm: "",
-    us_email: "",
-    us_phone: "",
+    usId: "",
+    usPw: "",
+    usNm: "",
+    usEmail: "",
+    usPhone: "",
   });
 
   const [confirmPw, setConfirmPw] = useState("");
@@ -38,7 +38,7 @@ export default function SignupForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.us_pw !== confirmPw) {
+    if (formData.usPw !== confirmPw) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
@@ -64,31 +64,31 @@ export default function SignupForm({
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <TextField
-        name="us_nm"
+        name="usNm"
         label="이름"
         fullWidth
         size="small"
         required
-        value={formData.us_nm}
+        value={formData.usNm}
         onChange={handleChange}
       />
       <TextField
-        name="us_id"
+        name="usId"
         label="아이디"
         fullWidth
         size="small"
         required
-        value={formData.us_id}
+        value={formData.usId}
         onChange={handleChange}
       />
       <TextField
-        name="us_pw"
+        name="usPw"
         label="비밀번호"
         type={showPassword ? "text" : "password"}
         fullWidth
         size="small"
         required
-        value={formData.us_pw}
+        value={formData.usPw}
         onChange={handleChange}
         InputProps={{
           endAdornment: (
@@ -121,21 +121,21 @@ export default function SignupForm({
         }}
       />
       <TextField
-        name="us_email"
+        name="usEmail"
         label="이메일"
         fullWidth
         size="small"
         required
-        value={formData.us_email}
+        value={formData.usEmail}
         onChange={handleChange}
       />
       <TextField
-        name="us_phone"
+        name="usPhone"
         label="전화번호"
         fullWidth
         size="small"
         required
-        value={formData.us_phone}
+        value={formData.usPhone}
         onChange={handleChange}
       />
       <Button variant="contained" type="submit" className={styles.signupButton}>
