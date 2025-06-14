@@ -19,7 +19,9 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>🐷짠예살롱</div>
+      <div className={styles.logo}>
+        <img src="/menu_log.png" alt="로고" className={styles.logoImage} />
+      </div>
       <nav className={styles.nav}>
         {isLoggedIn ? (
           <>
@@ -36,7 +38,18 @@ export default function Header() {
             </Button>
           </>
         ) : (
-          <Button onClick={openLoginModal}>로그인</Button>
+          <Button
+            sx={{
+              width: "100px", // 💡 원하는 너비
+              color: "#888",
+              fontSize: "13px",
+              fontWeight: "bold",
+              "&:hover": {},
+            }}
+            onClick={openLoginModal}
+          >
+            로그인
+          </Button>
         )}
       </nav>
     </header>

@@ -10,7 +10,6 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import styles from "../../auth/LoginForm.module.css";
 
 interface AuthDialogWrapperProps {
   open: boolean;
@@ -37,13 +36,20 @@ export default function AuthDialogWrapper({
           <CloseIcon />
         </IconButton>
       </Box>
-      <DialogTitle align="center" sx={{ mt: 3 }}>
-        <img src="/logo.png" alt="로고" width="50" />
-        <Typography variant="h6" mt={1}>
+      <DialogTitle
+        align="center"
+        sx={{ mt: 6, mb: 2, p: 0 }} // 여백 줄이기
+      >
+        <img src="/bear_face.png" alt="로고" width="50" />
+        <Typography
+          variant="h6"
+          color="text.secondary" // 회색 텍스트
+          sx={{ mt: -1 }} // 위 여백 아주 살짝만
+        >
           {title}
         </Typography>
       </DialogTitle>
-      <DialogContent sx={{ textAlign: "center" }}>
+      <DialogContent sx={{ textAlign: "center", mb: 5 }}>
         {subText && (
           <Box display="flex" justifyContent="flex-end" mb={2}>
             {subText}
