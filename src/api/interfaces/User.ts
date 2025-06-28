@@ -4,6 +4,8 @@ export interface UserRequest {
   usNm: string;
   usEmail: string;
   usPhone: string;
+  usRole: string;
+  token: string;
 }
 
 export interface UserResponse {

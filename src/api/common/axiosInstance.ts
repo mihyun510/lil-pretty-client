@@ -16,7 +16,7 @@ const apiInstance = axios.create({
 apiInstance.interceptors.request.use(
   (config) => {
     // 로컬스토리지에서 토큰 가져오기
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
 
     // 토큰이 있으면 Authorization 헤더에 추가
     if (token) {
@@ -45,8 +45,8 @@ apiInstance.interceptors.response.use(
       // 401(Unauthorized) 에러 발생 시 로그아웃 처리
       if (error.response.status === 401) {
         console.error("인증이 만료되었습니다. 다시 로그인하세요.");
-        localStorage.removeItem("token");
-        window.location.href = "/login"; // 로그인 페이지로 리디렉션
+        localStorage.removeItem("accessToken");
+        window.location.href = "/"; // 인트로페이지
       }
     }
     return Promise.reject(error);
