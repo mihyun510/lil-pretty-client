@@ -8,13 +8,12 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
 
 export default function Header() {
-  const { isLoggedIn, setLoggedIn } = useAuthStore();
+  const { isLoggedIn, logout } = useAuthStore();
   const { openLoginModal } = useAuthModalStore();
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    setLoggedIn(false);
-    // 페이지 이동이나 리프레시도 여기에 추가 가능
+    logout();
+    openLoginModal();
   };
 
   return (
@@ -28,7 +27,7 @@ export default function Header() {
             <Button startIcon={<HomeIcon />}>홈</Button>
             <Button startIcon={<ChatBubbleIcon />}>다이어트</Button>
             <Button startIcon={<FavoriteIcon />}>데이트</Button>
-            <Button>후기글</Button>
+            <Button>붓기맵</Button>
             <Button
               variant="contained"
               className={styles.logoutButton}

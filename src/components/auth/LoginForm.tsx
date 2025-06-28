@@ -1,9 +1,10 @@
 // src/components/LoginForm.tsx
-import { useState } from "react";
+import { useState, useCallback, FormEvent } from "react";
 import { TextField, IconButton, InputAdornment, Button } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import styles from "./LoginForm.module.css";
+import { login } from "@/api/authApi";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -14,15 +15,22 @@ export default function LoginForm({
   onSuccess,
   onSwitchToSignup,
 }: LoginFormProps) {
-  const [userid, setUserid] = useState("");
-  const [password, setPassword] = useState("");
+  const [usId, setUsId] = useState("");
+  const [usPw, setUsPw] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = () => {
-    // 여기에 로그인 API 호출 추가
-    console.log("로그인 요청:", { userid, password });
-    onSuccess(); // 성공 시 모달 닫기
-  };
+  const handleSubmit = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault(); // 기본 동작(페이지 새로고침) 방지
+
+      const response = await login(usId, usPw);
+      if (response.token) {
+        console.log(response);
+        onSuccess(); // 성공 시 모달 닫기
+      } else alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
+    },
+    [usId, usPw]
+  );
 
   return (
     <>
@@ -54,8 +62,8 @@ export default function LoginForm({
         label="아이디"
         variant="outlined"
         size="small"
-        value={userid}
-        onChange={(e) => setUserid(e.target.value)}
+        value={usId}
+        onChange={(e) => setUsId(e.target.value)}
         sx={{
           width: "350px",
           "& .MuiOutlinedInput-root": {
@@ -88,8 +96,8 @@ export default function LoginForm({
         variant="outlined"
         size="small"
         type={showPassword ? "text" : "password"}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={usPw}
+        onChange={(e) => setUsPw(e.target.value)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

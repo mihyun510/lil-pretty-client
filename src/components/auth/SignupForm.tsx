@@ -1,5 +1,5 @@
 // src/components/SignupForm.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -22,6 +22,8 @@ export default function SignupForm({
     usNm: "",
     usEmail: "",
     usPhone: "",
+    usRole: "",
+    token: "",
   });
 
   const [confirmPw, setConfirmPw] = useState("");
@@ -29,6 +31,7 @@ export default function SignupForm({
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //console.log(e.target);
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -57,9 +60,9 @@ export default function SignupForm({
     }
   };
 
-  useEffect(() => {
-    //console.log("변경된 formData:", formData);
-  }, [formData]);
+  // useEffect(() => {
+  //console.log("변경된 formData:", formData);
+  // }, [formData]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
