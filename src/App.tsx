@@ -1,5 +1,5 @@
 // src/App.tsx
-import { HashRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { Layout } from "@/components";
 import { UnAuthenticatedContents } from "@/UnAuthenticatedContents";
 import { AuthenticatedContents } from "@/AuthenticatedContents";
@@ -28,11 +28,11 @@ function RootApp() {
 function App() {
   return (
     <>
-      <Layout>
-        <Router>
+      <Router>
+        <Layout>
           <RootApp />
-        </Router>
-      </Layout>
+        </Layout>
+      </Router>
       <ModalContent />
     </>
   );

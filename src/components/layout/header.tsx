@@ -6,10 +6,12 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import styles from "./headerFooter.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { isLoggedIn, logout } = useAuthStore();
   const { openLoginModal } = useAuthModalStore();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -24,8 +26,15 @@ export default function Header() {
       <nav className={styles.nav}>
         {isLoggedIn ? (
           <>
-            <Button startIcon={<HomeIcon />}>홈</Button>
-            <Button startIcon={<ChatBubbleIcon />}>다이어트</Button>
+            <Button startIcon={<HomeIcon />} onClick={() => navigate("/")}>
+              홈
+            </Button>
+            <Button
+              startIcon={<ChatBubbleIcon />}
+              onClick={() => navigate("/diet/main")}
+            >
+              다이어트
+            </Button>
             <Button startIcon={<FavoriteIcon />}>데이트</Button>
             <Button>붓기맵</Button>
             <Button
