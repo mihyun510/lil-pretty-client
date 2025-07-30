@@ -28,28 +28,28 @@ export default function Header() {
         {isLoggedIn ? (
           <>
             <Button
-              startIcon={<HomeIcon sx={{ color: "#eb7496" }} />}
+              startIcon={<HomeIcon sx={{ color: "#f29bb8" }} />}
               onClick={() => navigate("/")}
               sx={{ color: "#000000" }}
             >
               홈
             </Button>
             <Button
-              startIcon={<ChatBubbleIcon sx={{ color: "#eb7496" }} />}
+              startIcon={<ChatBubbleIcon sx={{ color: "#f29bb8" }} />}
               onClick={() => navigate("/diet/main")}
               sx={{ color: "#000000" }}
             >
               다이어트
             </Button>
             <Button
-              startIcon={<FavoriteIcon sx={{ color: "#eb7496" }} />}
+              startIcon={<FavoriteIcon sx={{ color: "#f29bb8" }} />}
               sx={{ color: "#000000" }}
             >
               데이트
             </Button>
             <Button
               sx={{ color: "#000000" }}
-              startIcon={<RoomIcon sx={{ color: "#eb7496" }} />}
+              startIcon={<RoomIcon sx={{ color: "#f29bb8" }} />}
             >
               붓기맵
             </Button>
