@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import MapIcon from "@mui/icons-material/Map";
 import styles from "./headerFooter.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
@@ -26,18 +27,24 @@ export default function Header() {
       <nav className={styles.nav}>
         {isLoggedIn ? (
           <>
-            <Button startIcon={<HomeIcon />} onClick={() => navigate("/")}>
+            <Button
+              startIcon={<HomeIcon sx={{ color: "#fff" }} />}
+              onClick={() => navigate("/")}
+            >
               홈
             </Button>
             <Button
-              startIcon={<ChatBubbleIcon />}
+              startIcon={<ChatBubbleIcon sx={{ color: "#fff" }} />}
               onClick={() => navigate("/diet/main")}
             >
               다이어트
             </Button>
-            <Button startIcon={<FavoriteIcon />}>데이트</Button>
+            <Button startIcon={<FavoriteIcon sx={{ color: "#fff" }} />}>
+              데이트
+            </Button>
             <Button>붓기맵</Button>
             <Button
+              startIcon={<MapIcon sx={{ color: "#fff" }} />}
               variant="contained"
               className={styles.logoutButton}
               onClick={handleLogout}
