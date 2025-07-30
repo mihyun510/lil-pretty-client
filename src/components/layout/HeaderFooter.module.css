@@ -18,13 +18,13 @@
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #ff5a8a;
+  color: #eb7496;
 }
 
 .logoutButton {
-  background-color: #ffacc8 !important;
+  background-color: #f29bb8 !important;
   color: white !important;
-  border-radius: 16px !important;
+  border-radius: 8px !important;
 }
 
 .footer {
