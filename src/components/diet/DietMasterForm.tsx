@@ -13,7 +13,6 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // 데이터 타입 정의
 interface Meal {
@@ -68,8 +67,6 @@ const fakeFetchMeals = (priceCategory: number): Promise<Meal[]> => {
 };
 
 export default function DietMasterForm() {
-  const navigate = useNavigate();
-
   const [tabIndex, setTabIndex] = useState(0);
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(false);
