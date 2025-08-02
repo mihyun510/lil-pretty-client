@@ -8,10 +8,38 @@ import {
   Grid,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getMealRecItems } from "@/api/DietMainApi";
+import { MealRecItems, MealRecRequest } from "@/api/interfaces/MealRec";
+import { CommonResponse } from "@/api/interfaces/Common";
+import { getTodayYYYYMMDD, getOneWeekLaterYYYYMMDD } from "@/lib/date";
 
 export default function DietMainForm() {
   const navigate = useNavigate();
+  const [MealRecItems, setMealRecItems] = useState<MealRecItems[]>([]);
 
+  useEffect(() => {
+    const fetchDietCards = async () => {
+      const request: MealRecRequest = {
+        mrSDate: getTodayYYYYMMDD(),
+        mreDate: getOneWeekLaterYYYYMMDD(),
+      };
+
+      const response: CommonResponse<MealRecItems[]> = await getMealRecItems(
+        request
+      );
+
+      if (response.ok && response.data) {
+        // 예: API에서 받은 데이터가 배열 형태라고 가정
+        setMealRecItems(response.data);
+      } else {
+        console.error("식단 카드 조회 실패:", response.message);
+      }
+    };
+
+    fetchDietCards();
+  }, []);
+  /*
   const dietCards = [
     {
       img: "/intro_1.png",
@@ -29,7 +57,7 @@ export default function DietMainForm() {
       desc: "일주일 식단 양배추로 7일 식단 끝내기",
     },
   ];
-
+*/
   return (
     <Box sx={{ bgcolor: "#FFF0F5", p: 4 }}>
       {/* 🔲 전체를 grid로 틀 잡기 */}
@@ -137,7 +165,7 @@ export default function DietMainForm() {
             alignItems="flex-end" // 카드들을 아래로 정렬
             sx={{ flex: 1 }} // 부모 박스에서 높이 차지하도록
           >
-            {dietCards.map((item, index) => (
+            {MealRecItems.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card>
                   <CardMedia
