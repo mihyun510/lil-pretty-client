@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import RoomIcon from "@mui/icons-material/Room";
 import styles from "./headerFooter.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
@@ -27,17 +28,32 @@ export default function Header() {
       <nav className={styles.nav}>
         {isLoggedIn ? (
           <>
-            <Button startIcon={<HomeIcon />} onClick={() => navigate("/")}>
+            <Button
+              startIcon={<HomeIcon sx={{ color: "#f29bb8" }} />}
+              onClick={() => navigate("/")}
+              sx={{ color: "#000000" }}
+            >
               홈
             </Button>
             <Button
-              startIcon={<ChatBubbleIcon />}
+              startIcon={<ChatBubbleIcon sx={{ color: "#f29bb8" }} />}
               onClick={() => navigate("/diet/main")}
+              sx={{ color: "#000000" }}
             >
               다이어트
             </Button>
-            <Button startIcon={<FavoriteIcon />}>데이트</Button>
-            <Button>붓기맵</Button>
+            <Button
+              startIcon={<FavoriteIcon sx={{ color: "#f29bb8" }} />}
+              sx={{ color: "#000000" }}
+            >
+              데이트
+            </Button>
+            <Button
+              sx={{ color: "#000000" }}
+              startIcon={<RoomIcon sx={{ color: "#f29bb8" }} />}
+            >
+              붓기맵
+            </Button>
             <Button
               variant="contained"
               className={styles.logoutButton}
