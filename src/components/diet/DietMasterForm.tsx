@@ -132,8 +132,14 @@ export default function DietMasterForm() {
                   <CardMedia
                     component="img"
                     height="160"
+                    width="320px"
                     image={meal.image}
                     alt={meal.title}
+                    sx={{
+                      height: "200px",
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
                   />
                 </Box>
                 <CardContent>
