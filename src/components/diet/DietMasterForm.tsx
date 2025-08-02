@@ -99,10 +99,24 @@ export default function DietMasterForm() {
 
   return (
     <Box sx={{ width: "100%", maxWidth: 1200, margin: "auto", padding: 2 }}>
-      <Tabs value={tabIndex} onChange={handleChange} centered>
-        <Tab label="3,000원 이하" />
-        <Tab label="5,000원 이하" />
-        <Tab label="10,000원 이하" />
+      <Tabs
+        value={tabIndex}
+        onChange={handleChange}
+        centered
+        textColor="inherit"
+        TabIndicatorProps={{
+          style: { backgroundColor: "white" }, // 선택된 탭 아래 하얀 줄
+        }}
+        variant="fullWidth"
+        sx={{
+          backgroundColor: "#f8a6c2",
+          borderRadius: "10px",
+          marginBottom: "16px",
+        }}
+      >
+        <Tab label="3,000원 이하" sx={{ color: "white" }} />
+        <Tab label="5,000원 이하" sx={{ color: "white" }} />
+        <Tab label="10,000원 이하" sx={{ color: "white" }} />
       </Tabs>
 
       {loading ? (
@@ -110,40 +124,69 @@ export default function DietMasterForm() {
           <CircularProgress />
         </Box>
       ) : (
-        <Grid container spacing={3} mt={2}>
+        <Grid container spacing={3} sx={{ mt: 2 }}>
           {meals.map((meal, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card>
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <Card sx={{ backgroundColor: "#fffafbff" }}>
                 <Box sx={{ position: "relative" }}>
                   <CardMedia
                     component="img"
                     height="160"
+                    width="320px"
                     image={meal.image}
                     alt={meal.title}
-                  />
-                  <IconButton
-                    onClick={() => toggleLike(index)}
                     sx={{
-                      position: "absolute",
-                      top: 8,
-                      right: 8,
-                      backgroundColor: "white",
-                      "&:hover": { backgroundColor: "#f0f0f0" },
+                      height: "200px",
+                      width: "100%",
+                      objectFit: "cover",
                     }}
-                  >
-                    {meal.liked ? (
-                      <FavoriteIcon color="error" />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )}
-                  </IconButton>
+                  />
                 </Box>
                 <CardContent>
-                  <Typography variant="h6">{meal.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Box sx={{ display: "flex", position: "relative" }}>
+                    {" "}
+                    <Typography
+                      mt={0}
+                      variant="subtitle1"
+                      fontWeight={"bold"}
+                      fontSize={"20px"}
+                      color="grey"
+                    >
+                      {meal.title}
+                    </Typography>
+                    <IconButton
+                      onClick={() => toggleLike(index)}
+                      sx={{
+                        position: "relative",
+                        top: -10,
+                        left: 140,
+                        color: "#f06292",
+                        "&:hover": { backgroundColor: "#f0f0f0" },
+                      }}
+                    >
+                      {meal.liked ? (
+                        <FavoriteIcon />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ fontSize: 35 }} />
+                      )}
+                    </IconButton>
+                  </Box>
+
+                  <Typography
+                    mt={-2}
+                    variant="body2"
+                    color="text.secondary"
+                    fontSize={"18px"}
+                  >
                     {meal.description}
                   </Typography>
-                  <Typography variant="caption" display="block" mt={1}>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    mt={0}
+                    color="grey"
+                    fontSize={"15px"}
+                  >
                     칼로리: {meal.kcal}
                   </Typography>
                 </CardContent>
