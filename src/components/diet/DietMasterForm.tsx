@@ -159,7 +159,7 @@ export default function DietMasterForm() {
                       sx={{
                         position: "relative",
                         top: -10,
-                        left: 20,
+                        left: 140,
                         color: "#f06292",
                         "&:hover": { backgroundColor: "#f0f0f0" },
                       }}
