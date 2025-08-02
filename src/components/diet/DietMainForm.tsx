@@ -7,8 +7,11 @@ import {
   CardContent,
   Grid,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function DietMainForm() {
+  const navigate = useNavigate();
+
   const dietCards = [
     {
       img: "/intro_1.png",
@@ -86,6 +89,7 @@ export default function DietMainForm() {
                     backgroundColor: "#f06292",
                   },
                 }}
+                onClick={() => navigate("/diet/list")}
               >
                 가성비 식단 보러가기
               </Button>

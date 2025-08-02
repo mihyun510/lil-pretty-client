@@ -1,8 +1,9 @@
 //import { withNavigationWatcher } from "./contexts/navigation-context";
-import { DietMainPage, LandingPage } from "@/pages";
+import { DietMasterPage, DietMainPage, LandingPage } from "@/pages";
 
 export const appRoutes = [
   { path: "/diet/main", element: <DietMainPage /> },
+  { path: "/diet/list", element: <DietMasterPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 

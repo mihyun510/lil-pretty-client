@@ -15,6 +15,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
+    navigate("/");
     openLoginModal();
   };
 
