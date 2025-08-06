@@ -140,7 +140,13 @@ export default function DietMasterForm() {
                   />
                 </Box>
                 <CardContent>
-                  <Box sx={{ display: "flex", position: "relative" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      position: "relative",
+                    }}
+                  >
                     {" "}
                     <Typography
                       mt={0}
@@ -154,9 +160,6 @@ export default function DietMasterForm() {
                     <IconButton
                       onClick={() => toggleLike(index)}
                       sx={{
-                        position: "relative",
-                        top: -10,
-                        left: 140,
                         color: "#f06292",
                         "&:hover": { backgroundColor: "#f0f0f0" },
                       }}
