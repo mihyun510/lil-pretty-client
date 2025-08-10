@@ -11,43 +11,79 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function DietDetailForm() {
   return (
-    <Box p={3} bgcolor="#ffe4ec" minHeight="100vh">
+    <Box p={4} bgcolor="#ffe4ec" minHeight="100vh">
       {/* 상단: 판 다이어트존 */}
-      <Typography variant="h6" fontWeight="bold" mb={2}>
+      <Typography variant="h6" fontWeight="bold" mb={2} mx={20}>
         짠 다이어트존
       </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} gap={"60px"} mx={20}>
         {/* 왼쪽: 이미지 + 가격 + 칼로리 */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ display: "flex", alignItems: "center", p: 2 }}>
+        <Grid item xs={12} md={6} sx={{ width: "57%" }}>
+          <Card
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              p: 2,
+              width: "100%",
+              gap: 5,
+            }}
+          >
             <CardMedia
               component="img"
               image="https://via.placeholder.com/150"
               alt="음식 이미지"
-              sx={{ width: 180, borderRadius: 2 }}
+              sx={{ width: "60%", height: 300, borderRadius: 2 }}
             />
-            <CardContent>
-              <Typography variant="h6" fontWeight="bold">
-                3,000
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                가격
-              </Typography>
-              <Typography variant="h6" fontWeight="bold" mt={1}>
-                350
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                칼로리
-              </Typography>
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: 5,
+              }}
+            >
+              <Box>
+                <Typography variant="h4" fontWeight="bold">
+                  3,000
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  align="center"
+                >
+                  가격
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="h4" fontWeight="bold">
+                  350
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  align="center"
+                >
+                  칼로리
+                </Typography>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
 
         {/* 오른쪽: 레시피 */}
-        <Grid item xs={12} md={6}>
-          <Box bgcolor="#ff7f9f" color="white" p={2} borderRadius={1}>
-            <Typography variant="h6" fontWeight="bold">
+        <Grid item xs={12} md={6} sx={{ width: "40%", flex: 0.98 }}>
+          <Box
+            sx={{ width: "100%", height: 300, borderRadius: 2 }}
+            bgcolor="#ff7f9f"
+            color="white"
+            p={2}
+            borderRadius={1}
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+          >
+            <Typography variant="h5" fontWeight="bold">
               레시피
             </Typography>
             <Typography variant="body2" mt={1}>
@@ -60,35 +96,55 @@ export default function DietDetailForm() {
       </Grid>
 
       {/* 중간 타이틀 */}
-      <Box mt={4} display="flex" alignItems="center">
-        <Typography variant="h6" fontWeight="bold" color="text.primary">
+      <Box mt={2} display="flex" alignItems="center" mx={20}>
+        <Typography variant="h5" fontWeight="bold" color="text.primary">
           찜한{" "}
-          <Typography component="span" color="error" fontWeight="bold">
+          <Typography
+            variant="h6"
+            component="span"
+            color="#ff7f9f"
+            fontWeight="bold"
+          >
             다이어트 식단
           </Typography>
         </Typography>
-        <IconButton color="error">
-          <FavoriteIcon />
+        <IconButton>
+          <FavoriteIcon sx={{ color: "#f74782ff", fontSize: 40, mx: 3 }} />
         </IconButton>
       </Box>
 
       {/* 하단: 찜한 음식 리스트 */}
-      <Grid container spacing={2} mt={1}>
+      <Grid
+        container
+        spacing={2}
+        mt={1}
+        sx={{ gap: 8, display: "flex", mx: 20 }}
+      >
         {["양배추 참치 비빔밥", "들기름 양배추 덮밥", "양배추 스테이크"].map(
           (name, idx) => (
             <Grid item xs={4} key={idx}>
-              <Card sx={{ textAlign: "center", p: 2 }}>
+              <Card
+                sx={{
+                  textAlign: "center",
+                  p: 2,
+                  justifyContent: "center",
+                  borderRadius: "30px",
+                }}
+              >
+                <Typography variant="h7" sx={{ variant: "h2", mx: "auto" }}>
+                  {name}
+                </Typography>
                 <Box
                   sx={{
-                    width: 80,
-                    height: 80,
+                    width: 120,
+                    height: 150,
                     borderRadius: "50%",
                     bgcolor: "#ccc",
-                    mx: "auto",
-                    mb: 1,
+                    mx: 10,
+                    mt: 13,
+                    mb: 2,
                   }}
                 />
-                <Typography variant="body2">{name}</Typography>
               </Card>
             </Grid>
           )
