@@ -1,2 +1,2 @@
 export { LandingPage } from "./intro";
-export { DietMainPage, DietMasterPage } from "./diet";
+export { DietMainPage, DietMasterPage, DietDetailPage } from "./diet";
