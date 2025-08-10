@@ -1,10 +1,9 @@
-export interface MealRecRequest {
-  mrSDate: string;
-  mreDate: string;
-}
-
 export interface MealRecItems {
-  img: string;
-  title: string;
-  desc: string;
+  mr_title: string;
+  mr_desc: string;
+  mr_subject_nm: string;
+  mr_cd: string;
+  mm_cd: string;
+  mm_img: string;
+  mr_seq: number;
 }
