@@ -1,18 +1,15 @@
 import { apiInstance } from "./common/axiosInstance";
 import { CommonResponse } from "@/api/interfaces/Common";
-import { MealRecItems, MealRecRequest } from "@/api/interfaces/MealRec";
+import { MealRecItems } from "@/api/interfaces/MealRec";
 
 //로그인
-export async function getMealRecItems(
-  mealRecRequest: MealRecRequest
-): Promise<CommonResponse<MealRecItems[]>> {
+export async function getMealRecItems(): Promise<
+  CommonResponse<MealRecItems[]>
+> {
   try {
-    const response = await apiInstance.post(
-      "/diet/main/mealRecItems",
-      mealRecRequest
-    );
+    const response = await apiInstance.post("/diet/main/mealRecItems");
 
-    if (response.data.data) {
+    if (response.data.ok && response.data.data) {
       return {
         ok: response.data.ok,
         data: response.data.data,
