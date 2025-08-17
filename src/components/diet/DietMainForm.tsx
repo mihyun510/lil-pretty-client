@@ -152,7 +152,7 @@ export default function DietMainForm() {
                   <CardMedia
                     component="img"
                     height="160"
-                    image={item.mm_img}
+                    image={`/${item.mm_img}`}
                     alt={item.mr_title}
                   />
                   <CardContent>
@@ -177,19 +177,20 @@ export default function DietMainForm() {
           borderRadius={3}
           overflow="hidden"
         >
-          {/* 상단: 유투브 */}
+          {/* 상단: 전신사진 */}
           <Box position="relative" flex={1}>
-            {/* 유튜브 영상 */}
-            <Box mt={2} display="flex" justifyContent="center">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <img
+              src="/intro_2.png"
+              alt="전신사진"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+            <Box position="absolute" top={16} left={16} color="#fff">
+              <Typography variant="h6">164cm / 47.8kg</Typography>
+            </Box>
+            <Box position="absolute" bottom={16} left={16} color="#fff">
+              <Typography variant="subtitle1" fontWeight="bold">
+                3주만에 굶지 않고 5kg 감량한 방법
+              </Typography>
             </Box>
           </Box>
 
@@ -206,6 +207,18 @@ export default function DietMainForm() {
                 다이어트 꿀팁
               </Typography>
             </Typography>
+            {/* 유튜브 영상*/}
+            {/* <Box mt={2} display="flex" justifyContent="center">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/유튜브영상ID"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </Box> */}
           </Box>
         </Box>
       </Box>
