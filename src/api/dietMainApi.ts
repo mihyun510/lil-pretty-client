@@ -2,7 +2,6 @@ import { apiInstance } from "./common/axiosInstance";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { MealRecItems } from "@/api/interfaces/MealRec";
 
-//로그인
 export async function getMealRecItems(): Promise<
   CommonResponse<MealRecItems[]>
 > {

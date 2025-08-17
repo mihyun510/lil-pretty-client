@@ -13,70 +13,24 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useEffect, useState } from "react";
-
-// 데이터 타입 정의
-interface Meal {
-  title: string;
-  image: string;
-  description: string;
-  kcal: string;
-  priceCategory: number;
-  liked: boolean;
-}
-
-const fakeFetchMeals = (priceCategory: number): Promise<Meal[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const meals: Meal[] = [
-        {
-          title: "들깨 김 양배추 비빔밥",
-          image: "/images/meal1.jpg",
-          description: "양배추 진리의 조합",
-          kcal: "332kcal",
-          priceCategory: 3000,
-          liked: false,
-        },
-        {
-          title: "파 절임 비빔밥",
-          image: "/images/meal2.jpg",
-          description: "파기름 + 두부 + 양배추",
-          kcal: "384kcal",
-          priceCategory: 5000,
-          liked: false,
-        },
-        {
-          title: "양상추 참치 비빔밥",
-          image: "/images/meal3.jpg",
-          description: "양상추 + 참치마요",
-          kcal: "395kcal",
-          priceCategory: 10000,
-          liked: false,
-        },
-        {
-          title: "목은지 계란소 비빔밥",
-          image: "/images/meal4.jpg",
-          description: "목은지 + 계란소스 환상 조합",
-          kcal: "360kcal",
-          priceCategory: 5000,
-          liked: false,
-        },
-      ];
-      resolve(meals.filter((meal) => meal.priceCategory === priceCategory));
-    }, 500); // 로딩 시뮬레이션
-  });
-};
+import { MealItems } from "@/api/interfaces/MealMst";
+import { getMealsItems } from "@/api/dietMasterApi";
 
 export default function DietMasterForm() {
   const [tabIndex, setTabIndex] = useState(0);
-  const [meals, setMeals] = useState<Meal[]>([]);
+  const [meals, setMeals] = useState<MealItems[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const priceCategories = [3000, 5000, 10000];
+  const priceCategories = ["00001", "00002", "00003"];
 
-  const fetchMeals = async (priceCategory: number) => {
+  const fetchMeals = async (mmCategory: string) => {
     setLoading(true);
-    const result = await fakeFetchMeals(priceCategory);
-    setMeals(result);
+    const result = await getMealsItems(mmCategory); // ← API 호출
+    if (result.ok && result.data) {
+      setMeals(result.data);
+    } else {
+      console.error(result.message);
+    }
     setLoading(false);
   };
 
@@ -90,7 +44,7 @@ export default function DietMasterForm() {
 
   const toggleLike = (index: number) => {
     const updated = [...meals];
-    updated[index].liked = !updated[index].liked;
+    updated[index].favorite = updated[index].favorite === "Y" ? "N" : "Y";
     setMeals(updated);
   };
 
@@ -130,8 +84,8 @@ export default function DietMasterForm() {
                     component="img"
                     height="160"
                     width="320px"
-                    image={meal.image}
-                    alt={meal.title}
+                    image={"/" + meal.mm_img}
+                    alt={meal.mm_title}
                     sx={{
                       height: "200px",
                       width: "100%",
@@ -155,7 +109,7 @@ export default function DietMasterForm() {
                       fontSize={"20px"}
                       color="grey"
                     >
-                      {meal.title}
+                      {meal.mm_title}
                     </Typography>
                     <IconButton
                       onClick={() => toggleLike(index)}
@@ -164,7 +118,7 @@ export default function DietMasterForm() {
                         "&:hover": { backgroundColor: "#f0f0f0" },
                       }}
                     >
-                      {meal.liked ? (
+                      {meal.favorite == "Y" ? (
                         <FavoriteIcon />
                       ) : (
                         <FavoriteBorderIcon sx={{ fontSize: 35 }} />
@@ -178,7 +132,7 @@ export default function DietMasterForm() {
                     color="text.secondary"
                     fontSize={"18px"}
                   >
-                    {meal.description}
+                    {meal.mm_desc}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -187,7 +141,7 @@ export default function DietMasterForm() {
                     color="grey"
                     fontSize={"15px"}
                   >
-                    칼로리: {meal.kcal}
+                    칼로리: {meal.mm_kcal}
                   </Typography>
                 </CardContent>
               </Card>

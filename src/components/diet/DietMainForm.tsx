@@ -171,8 +171,8 @@ export default function DietMainForm() {
                   <CardMedia
                     component="img"
                     height="160"
-                    image={item.img}
-                    alt={item.title}
+                    image={`/${item.mm_img}`}
+                    alt={item.mr_title}
                   />
                   <CardContent>
                     <Typography variant="subtitle1" fontWeight="bold">
@@ -226,6 +226,18 @@ export default function DietMainForm() {
                 다이어트 꿀팁
               </Typography>
             </Typography>
+            {/* 유튜브 영상*/}
+            {/* <Box mt={2} display="flex" justifyContent="center">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/유튜브영상ID"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </Box> */}
           </Box>
         </Box>
       </Box>
