@@ -9,17 +9,25 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMealRecItems } from "@/api/dietMainApi";
-import { MealRecItems } from "@/api/interfaces/MealRec";
+import { getMealRecItems } from "@/api/DietMainApi";
+import { MealRecItems, MealRecRequest } from "@/api/interfaces/MealRec";
 import { CommonResponse } from "@/api/interfaces/Common";
+import { getTodayYYYYMMDD, getOneWeekLaterYYYYMMDD } from "@/lib/date";
 
 export default function DietMainForm() {
   const navigate = useNavigate();
   const [MealRecItems, setMealRecItems] = useState<MealRecItems[]>([]);
 
   useEffect(() => {
-    const fetchMealRecItems = async () => {
-      const response: CommonResponse<MealRecItems[]> = await getMealRecItems();
+    const fetchDietCards = async () => {
+      const request: MealRecRequest = {
+        mrSDate: getTodayYYYYMMDD(),
+        mreDate: getOneWeekLaterYYYYMMDD(),
+      };
+
+      const response: CommonResponse<MealRecItems[]> = await getMealRecItems(
+        request
+      );
 
       if (response.ok && response.data) {
         // 예: API에서 받은 데이터가 배열 형태라고 가정
@@ -29,9 +37,27 @@ export default function DietMainForm() {
       }
     };
 
-    fetchMealRecItems();
+    fetchDietCards();
   }, []);
-
+  /*
+  const dietCards = [
+    {
+      img: "/intro_1.png",
+      title: "약고추장 비빔밥",
+      desc: "닭가슴살로 만든 약고추장 덮어 비벼먹기",
+    },
+    {
+      img: "/intro_2.png",
+      title: "식단 가이드",
+      desc: "일주일 식단 양배추로 7일 식단 끝내기",
+    },
+    {
+      img: "/intro_3.png",
+      title: "식단 가이드",
+      desc: "일주일 식단 양배추로 7일 식단 끝내기",
+    },
+  ];
+*/
   return (
     <Box sx={{ bgcolor: "#FFF0F5", p: 4 }}>
       {/* 🔲 전체를 grid로 틀 잡기 */}
@@ -123,19 +149,12 @@ export default function DietMainForm() {
             <Typography variant="h5" fontWeight="bold">
               오늘의 식단 추천
             </Typography>
-            {MealRecItems.length > 0 ? (
-              <>
-                <Typography variant="h6" color="#f8a6c2" fontWeight="bold">
-                  {`${MealRecItems[0].mr_subject_nm} 레시피`}
-                </Typography>
-              </>
-            ) : (
-              <>
-                <Typography variant="h6" color="#f8a6c2" fontWeight="bold">
-                  레시피
-                </Typography>
-              </>
-            )}
+            <Typography variant="h6" color="#f8a6c2" fontWeight="bold">
+              붓기특화
+            </Typography>
+            <Typography variant="h6" color="#f8a6c2" fontWeight="bold">
+              양배추 레시피
+            </Typography>
           </Box>
 
           {/* 카드 리스트 */}
@@ -152,15 +171,15 @@ export default function DietMainForm() {
                   <CardMedia
                     component="img"
                     height="160"
-                    image={item.mm_img}
-                    alt={item.mr_title}
+                    image={item.img}
+                    alt={item.title}
                   />
                   <CardContent>
                     <Typography variant="subtitle1" fontWeight="bold">
-                      {item.mr_title}
+                      {item.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {item.mr_desc}
+                      {item.desc}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -177,19 +196,20 @@ export default function DietMainForm() {
           borderRadius={3}
           overflow="hidden"
         >
-          {/* 상단: 유투브 */}
+          {/* 상단: 전신사진 */}
           <Box position="relative" flex={1}>
-            {/* 유튜브 영상 */}
-            <Box mt={2} display="flex" justifyContent="center">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <img
+              src="/intro_2.png"
+              alt="전신사진"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+            <Box position="absolute" top={16} left={16} color="#fff">
+              <Typography variant="h6">164cm / 47.8kg</Typography>
+            </Box>
+            <Box position="absolute" bottom={16} left={16} color="#fff">
+              <Typography variant="subtitle1" fontWeight="bold">
+                3주만에 굶지 않고 5kg 감량한 방법
+              </Typography>
             </Box>
           </Box>
 
