@@ -9,10 +9,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMealRecItems } from "@/api/DietMainApi";
-import { MealRecItems, MealRecRequest } from "@/api/interfaces/MealRec";
+import { getMealRecItems } from "@/api/dietMainApi";
+import { MealRecItems } from "@/api/interfaces/MealRec";
 import { CommonResponse } from "@/api/interfaces/Common";
-import { getTodayYYYYMMDD, getOneWeekLaterYYYYMMDD } from "@/lib/date";
 
 export default function DietMainForm() {
   const navigate = useNavigate();
@@ -20,14 +19,7 @@ export default function DietMainForm() {
 
   useEffect(() => {
     const fetchDietCards = async () => {
-      const request: MealRecRequest = {
-        mrSDate: getTodayYYYYMMDD(),
-        mreDate: getOneWeekLaterYYYYMMDD(),
-      };
-
-      const response: CommonResponse<MealRecItems[]> = await getMealRecItems(
-        request
-      );
+      const response: CommonResponse<MealRecItems[]> = await getMealRecItems();
 
       if (response.ok && response.data) {
         // 예: API에서 받은 데이터가 배열 형태라고 가정
@@ -39,25 +31,7 @@ export default function DietMainForm() {
 
     fetchDietCards();
   }, []);
-  /*
-  const dietCards = [
-    {
-      img: "/intro_1.png",
-      title: "약고추장 비빔밥",
-      desc: "닭가슴살로 만든 약고추장 덮어 비벼먹기",
-    },
-    {
-      img: "/intro_2.png",
-      title: "식단 가이드",
-      desc: "일주일 식단 양배추로 7일 식단 끝내기",
-    },
-    {
-      img: "/intro_3.png",
-      title: "식단 가이드",
-      desc: "일주일 식단 양배추로 7일 식단 끝내기",
-    },
-  ];
-*/
+
   return (
     <Box sx={{ bgcolor: "#FFF0F5", p: 4 }}>
       {/* 🔲 전체를 grid로 틀 잡기 */}
@@ -176,10 +150,10 @@ export default function DietMainForm() {
                   />
                   <CardContent>
                     <Typography variant="subtitle1" fontWeight="bold">
-                      {item.title}
+                      {item.mr_title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {item.desc}
+                      {item.mr_desc}
                     </Typography>
                   </CardContent>
                 </Card>
