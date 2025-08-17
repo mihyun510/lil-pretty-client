@@ -8,12 +8,16 @@ import {
   IconButton,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 export default function DietDetailForm() {
   return (
     <Box p={4} bgcolor="#ffe4ec" minHeight="100vh">
       {/* 상단: 판 다이어트존 */}
+
       <Typography variant="h6" fontWeight="bold" mb={2} mx={20}>
+        <IconButton>
+          <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
+        </IconButton>
         짠 다이어트존
       </Typography>
 
