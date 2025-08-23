@@ -13,13 +13,15 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MealItems } from "@/api/interfaces/MealMst";
-import { getMealsItems } from "@/api/dietMasterApi";
+import { getMealsItems, saveMealFavorite } from "@/api/dietMasterApi";
 
 export default function DietMasterForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [meals, setMeals] = useState<MealItems[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const priceCategories = ["00001", "00002", "00003"];
 
@@ -42,10 +44,21 @@ export default function DietMasterForm() {
     setTabIndex(newValue);
   };
 
-  const toggleLike = (index: number) => {
-    const updated = [...meals];
-    updated[index].favorite = updated[index].favorite === "Y" ? "N" : "Y";
-    setMeals(updated);
+  const toggleLike = async (index: number) => {
+    const meal = meals[index];
+    const result = await saveMealFavorite(meal.mm_cd);
+
+    if (result.ok && result.data) {
+      const updated = [...meals];
+      updated[index].favorite = result.data.favorite;
+      setMeals(updated);
+    } else {
+      console.error(result.message);
+    }
+  };
+
+  const goToDetail = (mmCd: string) => {
+    navigate(`/diet/detail/${mmCd}`);
   };
 
   return (
@@ -79,7 +92,10 @@ export default function DietMasterForm() {
           {meals.map((meal, index) => (
             <Grid item key={index} xs={12} sm={6} md={4}>
               <Card sx={{ backgroundColor: "#fffafbff" }}>
-                <Box sx={{ position: "relative" }}>
+                <Box
+                  sx={{ position: "relative", cursor: "pointer" }}
+                  onClick={() => goToDetail(meal.mm_cd)}
+                >
                   <CardMedia
                     component="img"
                     height="160"
