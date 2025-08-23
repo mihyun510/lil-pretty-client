@@ -9,7 +9,7 @@ import {
 export const appRoutes = [
   { path: "/diet/main", element: <DietMainPage /> },
   { path: "/diet/list", element: <DietMasterPage /> },
-  { path: "/diet/detail", element: <DietDetailPage /> },
+  { path: "/diet/detail/:mmCd", element: <DietDetailPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 

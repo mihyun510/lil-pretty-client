@@ -6,10 +6,52 @@ import {
   CardContent,
   Grid,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-export default function DietDetailForm() {
+import { useEffect, useState } from "react";
+import { MealDtlItems } from "@/api/interfaces/MealDtl";
+import { getMealDtlItems } from "@/api/dietDetailApi";
+
+interface DietDetailFormProps {
+  mmCd?: string; // useParams에서 undefined 가능성 때문에 optional 처리
+}
+
+export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
+  const [mealDtl, setMealDtl] = useState<MealDtlItems[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!mmCd) return;
+
+    const fetchDetail = async () => {
+      setLoading(true);
+      const result = await getMealDtlItems(mmCd); // mmCd로 API 호출
+      if (result.ok && result.data) {
+        setMealDtl(result.data);
+      } else {
+        console.error(result.message);
+      }
+      setLoading(false);
+    };
+
+    fetchDetail();
+  }, [mmCd]);
+
+  if (loading || !mealDtl) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="50vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box p={4} bgcolor="#ffe4ec" minHeight="100vh">
       {/* 상단: 판 다이어트존 */}
