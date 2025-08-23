@@ -19,6 +19,7 @@ interface DietDetailFormProps {
 }
 
 export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
+  // 여기 추가
   const [mealDtl, setMealDtl] = useState<MealDtlItems[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +28,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
 
     const fetchDetail = async () => {
       setLoading(true);
-      const result = await getMealDtlItems(mmCd); // mmCd로 API 호출
+      const result = await getMealDtlItems(mmCd);
       if (result.ok && result.data) {
         setMealDtl(result.data);
       } else {
@@ -39,7 +40,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
     fetchDetail();
   }, [mmCd]);
 
-  if (loading || !mealDtl) {
+  if (loading || mealDtl.length === 0) {
     return (
       <Box
         display="flex"
@@ -77,7 +78,11 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
           >
             <CardMedia
               component="img"
-              image="https://via.placeholder.com/150"
+              image={
+                mealDtl[0]?.mm_img
+                  ? "/" + mealDtl[0].mm_img
+                  : "/placeholder.png"
+              }
               alt="음식 이미지"
               sx={{ width: "60%", height: 300, borderRadius: 2 }}
             />
@@ -91,7 +96,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
             >
               <Box>
                 <Typography variant="h4" fontWeight="bold">
-                  3,000
+                  {mealDtl[0].mm_pri}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -103,7 +108,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
               </Box>
               <Box>
                 <Typography variant="h4" fontWeight="bold">
-                  350
+                  {mealDtl[0].mm_kcal}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -135,11 +140,18 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
             <Typography variant="h5" fontWeight="bold">
               레시피
             </Typography>
-            <Typography variant="body2" mt={1}>
-              양배추를 등심등심 썰어주고 살짝 절여주세요 <br />
-              들깨가루 2 + 참기름 넣어주세요 <br />밥 위에 양배추 올려 김가루
-              살짝에 계란 후라이 올려주기
-            </Typography>
+            {mealDtl.length > 0 && mealDtl.some((meal) => meal.md_content) ? (
+              <Typography variant="body2" component="div">
+                {/* 각 레시피 내용을 줄바꿈 포함하여 출력 */}
+                {mealDtl.map((meal, idx) =>
+                  meal.md_content ? (
+                    <div key={idx}>{meal.md_content}</div>
+                  ) : null
+                )}
+              </Typography>
+            ) : (
+              <Typography variant="body2">레시피 정보가 없습니다.</Typography>
+            )}
           </Box>
         </Grid>
       </Grid>
