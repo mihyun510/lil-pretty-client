@@ -12,7 +12,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
 import { MealDtlItems } from "@/api/interfaces/MealDtl";
-import { getMealDtlItems } from "@/api/dietDetailApi";
+import { getMealDtlItems, getMealFavoriteItems } from "@/api/dietDetailApi";
+import { MealFavoriteItems } from "@/api/interfaces/MealFavorite";
+import { useNavigate } from "react-router-dom";
 
 interface DietDetailFormProps {
   mmCd?: string; // useParams에서 undefined 가능성 때문에 optional 처리
@@ -21,7 +23,19 @@ interface DietDetailFormProps {
 export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
   // 여기 추가
   const [mealDtl, setMealDtl] = useState<MealDtlItems[]>([]);
+  const [mealFavorite, setMealFavorite] = useState<MealFavoriteItems[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const fetchMealFavoriteItems = async () => {
+    setLoading(true);
+    const result = await getMealFavoriteItems();
+    if (result.ok && result.data) {
+      setMealFavorite(result.data);
+    } else {
+      console.error(result.message);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (!mmCd) return;
@@ -38,6 +52,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
     };
 
     fetchDetail();
+    fetchMealFavoriteItems();
   }, [mmCd]);
 
   if (loading || mealDtl.length === 0) {
@@ -57,11 +72,18 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
     <Box p={4} bgcolor="#ffe4ec" minHeight="100vh">
       {/* 상단: 판 다이어트존 */}
 
-      <Typography variant="h6" fontWeight="bold" mb={2} mx={20}>
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        mb={2}
+        mx={20}
+        sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+        onClick={() => navigate("/diet/list")}
+      >
         <IconButton>
           <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
         </IconButton>
-        짠 다이어트존
+        뒤로가기
       </Typography>
 
       <Grid container spacing={2} gap={"60px"} mx={20}>
@@ -176,37 +198,55 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
         mt={1}
         sx={{ gap: 8, display: "flex", mx: 20 }}
       >
-        {["양배추 참치 비빔밥", "들기름 양배추 덮밥", "양배추 스테이크"].map(
-          (name, idx) => (
-            <Grid item xs={4} key={idx}>
+        {mealFavorite.length > 0 ? (
+          mealFavorite.map((fav, idx) => (
+            <Grid item xs={4} key={fav.mf_cd || idx}>
               <Card
                 sx={{
                   textAlign: "center",
                   p: 2,
                   justifyContent: "center",
                   borderRadius: "30px",
+                  cursor: "pointer",
+                  transition: "0.2s",
+                  "&:hover": { boxShadow: 6, transform: "scale(1.02)" },
+                }}
+                onClick={async () => {
+                  if (!fav.mm_cd) return;
+                  setLoading(true);
+                  const result = await getMealDtlItems(fav.mm_cd); // 선택한 식단의 레시피 가져오기
+                  if (result.ok && result.data) {
+                    setMealDtl(result.data);
+                  } else {
+                    console.error(result.message);
+                  }
+                  setLoading(false);
                 }}
               >
-                <Typography
-                  variant="subtitle1"
-                  sx={{ variant: "h2", mx: "auto" }}
-                >
-                  {name}
+                <Typography variant="subtitle1" sx={{ mx: "auto", mb: 2 }}>
+                  {fav.mm_title}
                 </Typography>
+
                 <Box
+                  component="img"
+                  src={fav.mm_img ? "/" + fav.mm_img : "/placeholder.png"}
+                  alt={fav.mm_title}
                   sx={{
                     width: 120,
                     height: 120,
                     borderRadius: "50%",
-                    bgcolor: "#ccc",
-                    mx: 10,
-                    mt: 13,
+                    objectFit: "cover",
+                    mx: "auto",
                     mb: 2,
                   }}
                 />
               </Card>
             </Grid>
-          )
+          ))
+        ) : (
+          <Typography variant="body2" sx={{ mx: 20 }}>
+            찜한 음식이 없습니다.
+          </Typography>
         )}
       </Grid>
     </Box>
