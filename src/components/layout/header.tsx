@@ -44,6 +44,7 @@ export default function Header() {
             </Button>
             <Button
               startIcon={<FavoriteIcon sx={{ color: "#f29bb8" }} />}
+              onClick={() => navigate("/date/main")}
               sx={{ color: "#000000" }}
             >
               데이트

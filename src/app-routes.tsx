@@ -5,11 +5,12 @@ import {
   DietDetailPage,
   LandingPage,
 } from "@/pages";
-
+import DateMainPage from "@/pages/date/DateMainPage";
 export const appRoutes = [
   { path: "/diet/main", element: <DietMainPage /> },
   { path: "/diet/list", element: <DietMasterPage /> },
   { path: "/diet/detail/:mmCd", element: <DietDetailPage /> },
+  { path: "/date/main", element: <DateMainPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
