@@ -10,7 +10,9 @@ export const appRoutes = [
   { path: "/diet/main", element: <DietMainPage /> },
   { path: "/diet/list", element: <DietMasterPage /> },
   { path: "/diet/detail/:mmCd", element: <DietDetailPage /> },
+
   { path: "/date/main", element: <DateMainPage /> },
+  { path: "/date/detail/:dmCd", element: <DateDetailPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
