@@ -4,6 +4,7 @@ import {
   DietMainPage,
   DietDetailPage,
   LandingPage,
+  DateDetailPage,
 } from "@/pages";
 import DateMainPage from "@/pages/date/DateMainPage";
 export const appRoutes = [
