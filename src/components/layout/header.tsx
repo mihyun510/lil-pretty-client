@@ -52,6 +52,7 @@ export default function Header() {
             <Button
               sx={{ color: "#000000" }}
               startIcon={<RoomIcon sx={{ color: "#f29bb8" }} />}
+              onClick={() => navigate("/swellingmap/main")}
             >
               붓기맵
             </Button>

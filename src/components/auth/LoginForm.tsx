@@ -98,6 +98,11 @@ export default function LoginForm({
         type={showPassword ? "text" : "password"}
         value={usPw}
         onChange={(e) => setUsPw(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSubmit(e); // 엔터 입력 시 로그인 로직 실행
+          }
+        }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
