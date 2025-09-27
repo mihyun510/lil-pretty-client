@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MealItems } from "@/api/interfaces/MealMst";
@@ -62,109 +63,124 @@ export default function DietMasterForm() {
   };
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 1200, margin: "auto", padding: 2 }}>
-      <Tabs
-        value={tabIndex}
-        onChange={handleChange}
-        centered
-        textColor="inherit"
-        TabIndicatorProps={{
-          style: { backgroundColor: "white" }, // 선택된 탭 아래 하얀 줄
-        }}
-        variant="fullWidth"
-        sx={{
-          backgroundColor: "#f8a6c2",
-          borderRadius: "10px",
-          marginBottom: "16px",
-        }}
-      >
-        <Tab label="3,000원 이하" sx={{ color: "white" }} />
-        <Tab label="5,000원 이하" sx={{ color: "white" }} />
-        <Tab label="10,000원 이하" sx={{ color: "white" }} />
-      </Tabs>
+    <div style={{ margin: "30px 100px 30px 100px" }}>
+      <Box sx={{ width: "100%" }}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          mb={3}
+          sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          onClick={() => navigate("/diet/main")}
+        >
+          <IconButton>
+            <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
+          </IconButton>
+          뒤로가기
+        </Typography>
 
-      {loading ? (
-        <Box display="flex" justifyContent="center" mt={5}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Grid container spacing={3} sx={{ mt: 2 }}>
-          {meals.map((meal, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-              <Card sx={{ backgroundColor: "#fffafbff" }}>
-                <Box
-                  sx={{ position: "relative", cursor: "pointer" }}
-                  onClick={() => goToDetail(meal.mm_cd)}
-                >
-                  <CardMedia
-                    component="img"
-                    height="160"
-                    width="320px"
-                    image={"/" + meal.mm_img}
-                    alt={meal.mm_title}
-                    sx={{
-                      height: "200px",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Box>
-                <CardContent>
+        <Tabs
+          value={tabIndex}
+          onChange={handleChange}
+          centered
+          textColor="inherit"
+          TabIndicatorProps={{
+            style: { backgroundColor: "white" }, // 선택된 탭 아래 하얀 줄
+          }}
+          variant="fullWidth"
+          sx={{
+            backgroundColor: "#f8a6c2",
+            borderRadius: "10px",
+            marginBottom: "16px",
+          }}
+        >
+          <Tab label="3,000원 이하" sx={{ color: "white" }} />
+          <Tab label="5,000원 이하" sx={{ color: "white" }} />
+          <Tab label="10,000원 이하" sx={{ color: "white" }} />
+        </Tabs>
+
+        {loading ? (
+          <Box display="flex" justifyContent="center" mt={5}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid container spacing={3} sx={{ mt: 2 }}>
+            {meals.map((meal, index) => (
+              <Grid item key={index} xs={12} sm={6} md={4}>
+                <Card sx={{ backgroundColor: "#fffafbff" }}>
                   <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      position: "relative",
-                    }}
+                    sx={{ position: "relative", cursor: "pointer" }}
+                    onClick={() => goToDetail(meal.mm_cd)}
                   >
-                    {" "}
-                    <Typography
-                      mt={0}
-                      variant="subtitle1"
-                      fontWeight={"bold"}
-                      fontSize={"20px"}
-                      color="grey"
-                    >
-                      {meal.mm_title}
-                    </Typography>
-                    <IconButton
-                      onClick={() => toggleLike(index)}
+                    <CardMedia
+                      component="img"
+                      height="160"
+                      width="320px"
+                      image={"/" + meal.mm_img}
+                      alt={meal.mm_title}
                       sx={{
-                        color: "#f06292",
-                        "&:hover": { backgroundColor: "#f0f0f0" },
+                        height: "200px",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </Box>
+                  <CardContent>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        position: "relative",
                       }}
                     >
-                      {meal.favorite == "Y" ? (
-                        <FavoriteIcon />
-                      ) : (
-                        <FavoriteBorderIcon sx={{ fontSize: 35 }} />
-                      )}
-                    </IconButton>
-                  </Box>
+                      {" "}
+                      <Typography
+                        mt={0}
+                        variant="subtitle1"
+                        fontWeight={"bold"}
+                        fontSize={"20px"}
+                        color="grey"
+                      >
+                        {meal.mm_title}
+                      </Typography>
+                      <IconButton
+                        onClick={() => toggleLike(index)}
+                        sx={{
+                          color: "#f06292",
+                          "&:hover": { backgroundColor: "#f0f0f0" },
+                        }}
+                      >
+                        {meal.favorite == "Y" ? (
+                          <FavoriteIcon />
+                        ) : (
+                          <FavoriteBorderIcon sx={{ fontSize: 35 }} />
+                        )}
+                      </IconButton>
+                    </Box>
 
-                  <Typography
-                    mt={-2}
-                    variant="body2"
-                    color="text.secondary"
-                    fontSize={"18px"}
-                  >
-                    {meal.mm_desc}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    mt={0}
-                    color="grey"
-                    fontSize={"15px"}
-                  >
-                    칼로리: {meal.mm_kcal}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </Box>
+                    <Typography
+                      mt={-2}
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={"18px"}
+                    >
+                      {meal.mm_desc}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      mt={0}
+                      color="grey"
+                      fontSize={"15px"}
+                    >
+                      칼로리: {meal.mm_kcal}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Box>
+    </div>
   );
 }

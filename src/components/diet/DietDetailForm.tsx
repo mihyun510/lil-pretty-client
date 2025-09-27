@@ -204,7 +204,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
               <Card
                 sx={{
                   textAlign: "center",
-                  p: 2,
+                  p: 3,
                   justifyContent: "center",
                   borderRadius: "30px",
                   cursor: "pointer",
@@ -232,8 +232,8 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
                   src={fav.mm_img ? "/" + fav.mm_img : "/placeholder.png"}
                   alt={fav.mm_title}
                   sx={{
-                    width: 120,
-                    height: 120,
+                    width: 200,
+                    height: 200,
                     borderRadius: "50%",
                     objectFit: "cover",
                     mx: "auto",

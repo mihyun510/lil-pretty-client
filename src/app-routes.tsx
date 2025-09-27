@@ -5,9 +5,14 @@ import {
   DietDetailPage,
   LandingPage,
   DateDetailPage,
+  SwellingMapChallengePage,
+  SwellingMapMainPage,
 } from "@/pages";
 import DateMainPage from "@/pages/date/DateMainPage";
 export const appRoutes = [
+  { path: "/swellingmap/main", element: <SwellingMapMainPage /> },
+  { path: "/swellingmap/challenge", element: <SwellingMapChallengePage /> },
+
   { path: "/diet/main", element: <DietMainPage /> },
   { path: "/diet/list", element: <DietMasterPage /> },
   { path: "/diet/detail/:mmCd", element: <DietDetailPage /> },

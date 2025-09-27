@@ -53,22 +53,10 @@ export default function DietMainForm() {
             boxShadow={3}
           >
             <img
-              src="/intro_1.png"
+              src="/home_08.png"
               alt="리루식단"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
-            {/* 텍스트 + 버튼 */}
-            <Box position="absolute" top={24} left={24} color="#fff">
-              <Typography variant="h6" fontWeight="bold">
-                하루 3, 000 원으로
-              </Typography>
-              <Typography variant="h6" fontWeight="bold">
-                예뻐지기 시작!
-              </Typography>
-              <Typography variant="body2">
-                가성비 미친 하루 식단 모음
-              </Typography>
-            </Box>
             <Box
               position="absolute"
               bottom={15}
@@ -166,52 +154,21 @@ export default function DietMainForm() {
           display="flex"
           flexDirection="column"
           justifyContent="space-between"
-          height="600px"
+          height="100%"
           borderRadius={3}
           overflow="hidden"
         >
-          {/* 상단: 전신사진 */}
-          <Box position="relative" flex={1}>
-            <img
-              src="/intro_2.png"
-              alt="전신사진"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          {/* 유튜브 영상*/}
+          <Box mt={2} display="flex" justifyContent="center">
+            <iframe
+              width="560px"
+              height="720px"
+              src="https://www.youtube.com/embed/yqM1EXW-Ncw"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
             />
-            <Box position="absolute" top={16} left={16} color="#fff">
-              <Typography variant="h6">164cm / 47.8kg</Typography>
-            </Box>
-            <Box position="absolute" bottom={16} left={16} color="#fff">
-              <Typography variant="subtitle1" fontWeight="bold">
-                3주만에 굶지 않고 5kg 감량한 방법
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* 하단: 언니들이 말아주는 다이어트 꿀팁 */}
-          <Box textAlign="center" bgcolor="#FFF0F5" py={2}>
-            <Typography variant="body1" fontWeight="bold">
-              언니들이 말아주는{" "}
-              <Typography
-                component="span"
-                color="#f8a6c2"
-                variant="h5"
-                fontWeight="bold"
-              >
-                다이어트 꿀팁
-              </Typography>
-            </Typography>
-            {/* 유튜브 영상*/}
-            {/* <Box mt={2} display="flex" justifyContent="center">
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/유튜브영상ID"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </Box> */}
           </Box>
         </Box>
       </Box>
