@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 export function useKakaoMap() {
   const [loaded, setLoaded] = useState(false);
 
-  console.log("useKakaoMap key:::", import.meta.env.VITE_KAKAO_MAP_API_KEY);
-
   useEffect(() => {
     // 이미 로드되어 있으면 바로 true
     if (window.kakao) {
@@ -26,6 +24,5 @@ export function useKakaoMap() {
     };
     document.head.appendChild(script);
   }, []);
-  console.log("useKakaoMap loaded:11::", loaded);
   return loaded;
 }
