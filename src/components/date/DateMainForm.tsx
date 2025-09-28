@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function DateMainForm() {
   const [DateItems, SetDateItems] = useState<DateItems[]>([]);
-  const [value, setValue] = useState(5000);
+  const [value, setValue] = useState(50000);
   const navigate = useNavigate();
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
