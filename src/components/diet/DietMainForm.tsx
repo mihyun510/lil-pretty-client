@@ -159,13 +159,12 @@ export default function DietMainForm() {
           overflow="hidden"
         >
           {/* 유튜브 영상*/}
-          <Box mt={2} display="flex" justifyContent="center">
+          <Box mt={0} display="flex" justifyContent="center">
             <iframe
-              width="560px"
-              height="720px"
+              width="100%"
+              height="700"
               src="https://www.youtube.com/embed/yqM1EXW-Ncw"
               title="YouTube video player"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />

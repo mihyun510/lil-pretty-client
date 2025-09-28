@@ -68,14 +68,20 @@ export default function DietMasterForm() {
         <Typography
           variant="h6"
           fontWeight="bold"
+          fontSize={15}
           mb={3}
-          sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          sx={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            color: "#f74782ff",
+          }}
           onClick={() => navigate("/diet/main")}
         >
           <IconButton>
             <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
           </IconButton>
-          뒤로가기
+          다이어트 존
         </Typography>
 
         <Tabs
@@ -150,7 +156,7 @@ export default function DietMasterForm() {
                         }}
                       >
                         {meal.favorite == "Y" ? (
-                          <FavoriteIcon />
+                          <FavoriteIcon sx={{ fontSize: 35 }} />
                         ) : (
                           <FavoriteBorderIcon sx={{ fontSize: 35 }} />
                         )}
