@@ -2,11 +2,18 @@ import { apiInstance } from "./common/axiosInstance";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { DateItems } from "@/api/interfaces/DateMst";
 
-export async function getDateItems(): Promise<CommonResponse<DateItems>> {
+export async function getDateItems(
+  value1: number,
+  value2: number
+): Promise<CommonResponse<DateItems>> {
   try {
-    const response = await apiInstance.post("/date/master/dateItems", {});
+    const response = await apiInstance.post("/date/master/dateItems", {
+      value1,
+      value2,
+    });
 
     if (response.data.ok && response.data.data) {
+      console.log(response.data);
       return {
         ok: response.data.ok,
         data: response.data.data,
