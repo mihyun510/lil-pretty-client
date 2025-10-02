@@ -68,14 +68,20 @@ export default function DietMasterForm() {
         <Typography
           variant="h6"
           fontWeight="bold"
+          fontSize={15}
           mb={3}
-          sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          sx={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            color: "#f74782ff",
+          }}
           onClick={() => navigate("/diet/main")}
         >
           <IconButton>
             <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
           </IconButton>
-          뒤로가기
+          다이어트 존
         </Typography>
 
         <Tabs
@@ -108,7 +114,11 @@ export default function DietMasterForm() {
               <Grid item key={index} xs={12} sm={6} md={4}>
                 <Card sx={{ backgroundColor: "#fffafbff" }}>
                   <Box
-                    sx={{ position: "relative", cursor: "pointer" }}
+                    sx={{
+                      width: "370px",
+                      position: "relative",
+                      cursor: "pointer",
+                    }}
                     onClick={() => goToDetail(meal.mm_cd)}
                   >
                     <CardMedia
@@ -150,7 +160,7 @@ export default function DietMasterForm() {
                         }}
                       >
                         {meal.favorite == "Y" ? (
-                          <FavoriteIcon />
+                          <FavoriteIcon sx={{ fontSize: 35 }} />
                         ) : (
                           <FavoriteBorderIcon sx={{ fontSize: 35 }} />
                         )}
