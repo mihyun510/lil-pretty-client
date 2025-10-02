@@ -2,7 +2,7 @@ import { getDateItems } from "@/api/dateMastApi";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-/*
+
 const [DateDtl, SetDateDtl] = useState<DateDtl[]>([]);
 useEffect(() => {
   const disFetch = async () => {
@@ -14,7 +14,7 @@ useEffect(() => {
     }
     disFetch();
   };
-}, []);*/
+}, []);
 export default function DateDetailForm() {
   return <Box>힐링 데이트편 순위</Box>;
 }
