@@ -6,6 +6,7 @@ export interface DateDtlItems {
   dd_title: string;
   dd_img: string;
   dd_desc: string;
-  dd_budget: number;
+  dd_price: number;
   dd_rank: number;
+  dd_location: string;
 }

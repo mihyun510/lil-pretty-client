@@ -114,7 +114,11 @@ export default function DietMasterForm() {
               <Grid item key={index} xs={12} sm={6} md={4}>
                 <Card sx={{ backgroundColor: "#fffafbff" }}>
                   <Box
-                    sx={{ position: "relative", cursor: "pointer" }}
+                    sx={{
+                      width: "370px",
+                      position: "relative",
+                      cursor: "pointer",
+                    }}
                     onClick={() => goToDetail(meal.mm_cd)}
                   >
                     <CardMedia

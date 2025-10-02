@@ -41,7 +41,7 @@ export default function DateDetailForm() {
   }, []);
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", py: 3 }}>
-      <IconButton onClick={() => navigate("date/main")}>
+      <IconButton onClick={() => navigate("/date/main")}>
         <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
       </IconButton>
 
@@ -142,7 +142,7 @@ export default function DateDetailForm() {
               >
                 <CardMedia
                   component="img"
-                  image={item.dd_img}
+                  image="/user_1.png"
                   sx={{
                     width: 60,
                     height: 50,
