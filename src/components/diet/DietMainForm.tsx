@@ -163,7 +163,7 @@ export default function DietMainForm() {
             <iframe
               width="100%"
               height="700"
-              src="https://www.youtube.com/embed/yqM1EXW-Ncw"
+              src="https://www.youtube.com/embed/WxTGeYIxeu4"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
