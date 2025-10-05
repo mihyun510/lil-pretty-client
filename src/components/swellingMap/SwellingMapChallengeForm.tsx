@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Button, Typography, IconButton } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -8,14 +8,90 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ko"; //한국어 locale 추가
+import {
+  getWaterDailyItem,
+  saveWaterDailyItem,
+} from "@/api/swellingMapChallengeApi";
+import { WaterDailyItem } from "@/api/interfaces/WaterDaily";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function SwellingMapChallengeForm() {
-  const [amount, setAmount] = useState(0.0);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+  const { user } = useAuthStore();
+  const [waterDailyItem, setWaterDailyItem] = useState<WaterDailyItem>({
+    wd_cd: "",
+    us_id: user === null ? "" : user.usId, // 필요 시 로그인 사용자 ID로 교체
+    wd_date: dayjs().format("YYYYMMDD"),
+    wd_ml: 0.0,
+  });
 
-  const handleIncrease = () => setAmount((prev) => prev + 0.5);
-  const handleDecrease = () =>
-    setAmount((prev) => (prev > 0.5 ? prev - 0.5 : prev));
+  //달력 날짜 변경 시 waterData의 wd_date 업데이트 + 데이터 재조회
+  const handleDateChange = async (newDate: dayjs.Dayjs | null) => {
+    if (!newDate) return;
+    const formattedDate = newDate.format("YYYYMMDD");
+    await fetchData(formattedDate);
+  };
+
+  // 💧 물 섭취량 증가
+  const handleIncrease = () => {
+    setWaterDailyItem((prev) => ({
+      ...prev,
+      wd_ml: prev.wd_ml < 2.0 ? prev.wd_ml + 0.5 : prev.wd_ml,
+    }));
+  };
+
+  // 💧 물 섭취량 감소
+  const handleDecrease = () => {
+    setWaterDailyItem((prev) => ({
+      ...prev,
+      wd_ml: prev.wd_ml > 0.0 ? prev.wd_ml - 0.5 : prev.wd_ml,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const result = await saveWaterDailyItem(waterDailyItem);
+      if (result.ok && result.data) {
+        alert(`${waterDailyItem.wd_date} 기록이 저장되었습니다 💧`);
+        fetchData(waterDailyItem.wd_date); // 저장 후 갱신
+      } else {
+        console.error(result.message);
+        alert("저장 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("저장 실패:", error);
+      alert("저장 중 오류가 발생했습니다.");
+    }
+  };
+
+  //날짜별 데이터 조회 함수
+  const fetchData = async (wdDate: string) => {
+    try {
+      const res = await getWaterDailyItem(wdDate);
+      if (res.ok && res.data) {
+        setWaterDailyItem(res.data);
+      } else {
+        setWaterDailyItem({
+          wd_cd: "",
+          us_id: "admin",
+          wd_date: wdDate,
+          wd_ml: 0.0,
+        });
+      }
+    } catch (error) {
+      console.error("데이터 조회 실패:", error);
+      setWaterDailyItem({
+        wd_cd: "",
+        us_id: "admin",
+        wd_date: wdDate,
+        wd_ml: 0.0,
+      });
+    }
+  };
+
+  // 첫 진입 시 오늘 날짜 데이터 조회
+  useEffect(() => {
+    fetchData(dayjs().format("YYYYMMDD"));
+  }, []);
 
   return (
     <Box
@@ -59,8 +135,8 @@ export default function SwellingMapChallengeForm() {
           <Box mt={3} display="flex" justifyContent="center">
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
               <DateCalendar
-                value={selectedDate}
-                onChange={(newValue) => setSelectedDate(newValue)}
+                value={dayjs(waterDailyItem.wd_date)}
+                onChange={handleDateChange}
               />
             </LocalizationProvider>
           </Box>
@@ -88,7 +164,7 @@ export default function SwellingMapChallengeForm() {
               <RemoveIcon />
             </IconButton>
             <Typography variant="h6" fontWeight="bold">
-              {amount.toFixed(1)} L
+              {waterDailyItem.wd_ml.toFixed(1)} L
             </Typography>
             <IconButton onClick={handleIncrease}>
               <AddIcon />
@@ -102,6 +178,7 @@ export default function SwellingMapChallengeForm() {
               backgroundColor: "#f4a7a7",
               "&:hover": { backgroundColor: "#f28b8b" },
             }}
+            onClick={handleSave}
           >
             기록 완료
           </Button>
