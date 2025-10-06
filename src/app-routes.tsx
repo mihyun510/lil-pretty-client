@@ -7,8 +7,9 @@ import {
   DateDetailPage,
   SwellingMapChallengePage,
   SwellingMapMainPage,
+  DateMainPage,
 } from "@/pages";
-import DateMainPage from "@/pages/date/DateMainPage";
+
 export const appRoutes = [
   { path: "/swellingmap/main", element: <SwellingMapMainPage /> },
   { path: "/swellingmap/challenge", element: <SwellingMapChallengePage /> },
