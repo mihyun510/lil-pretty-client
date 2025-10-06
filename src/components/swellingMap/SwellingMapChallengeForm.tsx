@@ -24,6 +24,15 @@ export default function SwellingMapChallengeForm() {
     wd_ml: 0.0,
   });
 
+  // 이미지 결정 함수
+  const getCharacterImage = (wd_ml: number) => {
+    if (wd_ml < 0.5) return "/water_01.png"; //0L
+    if (wd_ml < 1.0) return "/water_02.png"; //0.5L
+    if (wd_ml < 1.5) return "/water_03.png"; //1.0L
+    if (wd_ml < 1.5) return "/water_03.png"; //1.5L
+    return "/water_04.png"; //2.0L
+  };
+
   //달력 날짜 변경 시 waterData의 wd_date 업데이트 + 데이터 재조회
   const handleDateChange = async (newDate: dayjs.Dayjs | null) => {
     if (!newDate) return;
@@ -92,6 +101,8 @@ export default function SwellingMapChallengeForm() {
   useEffect(() => {
     fetchData(dayjs().format("YYYYMMDD"));
   }, []);
+
+  const currentImage = getCharacterImage(waterDailyItem.wd_ml);
 
   return (
     <Box
@@ -186,19 +197,15 @@ export default function SwellingMapChallengeForm() {
 
         {/* 오른쪽 - 캐릭터 자리 */}
         <Box sx={{ flex: 1, textAlign: "center" }}>
-          <Box
-            sx={{
-              width: 200,
-              height: 300,
-              bgcolor: "#ffc1c1",
-              borderRadius: "50%",
-              mx: "auto",
+          <img
+            src={currentImage}
+            alt="캐릭터"
+            style={{
+              width: "200px",
+              height: "300px",
+              objectFit: "contain",
             }}
-          >
-            <Typography pt={12} color="white">
-              캐릭터
-            </Typography>
-          </Box>
+          />
         </Box>
       </Box>
     </Box>

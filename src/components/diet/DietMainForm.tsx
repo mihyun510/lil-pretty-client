@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { getMealRecItems } from "@/api/dietMainApi";
 import { MealRecItems } from "@/api/interfaces/MealRec";
 import { CommonResponse } from "@/api/interfaces/Common";
+import { downloadFile } from "@/api/fileApi";
 
 export default function DietMainForm() {
   const navigate = useNavigate();
@@ -100,6 +101,11 @@ export default function DietMainForm() {
                     backgroundColor: "#f06292",
                   },
                 }}
+                onClick={() =>
+                  downloadFile(
+                    "mealRec/테이블_정의서_20251007122110.xlsx"
+                  )
+                } // <- 여기 경로 지정
               >
                 오늘의 식단 GET IT
               </Button>
