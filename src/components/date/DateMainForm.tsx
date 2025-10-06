@@ -16,19 +16,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function DateMainForm() {
   const [DateItems, SetDateItems] = useState<DateItems[]>([]);
-  const [value, setValue] = useState(50000);
+  const [priceValue, setPriceValue] = useState(50000);
   const navigate = useNavigate();
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
+    setPriceValue(newValue as number);
   };
   useEffect(() => {
     const fetchDateCards = async () => {
       const response: CommonResponse<DateItems[]> = await getDateItems(
         5000,
-        value
+        priceValue
       );
-      console.log("민정:::" + value);
+
       if (response.ok && response.data) {
         return SetDateItems(response.data);
       } else {
@@ -36,7 +36,7 @@ export default function DateMainForm() {
       }
     };
     fetchDateCards();
-  }, [value]);
+  }, [priceValue]);
 
   const goToDetail = (dmCd: string) => {
     navigate(`/date/detail/${dmCd}`);
@@ -65,7 +65,7 @@ export default function DateMainForm() {
           min={5000}
           max={50000}
           step={1000}
-          value={value}
+          value={priceValue}
           valueLabelDisplay="auto"
           onChange={handleChange}
           sx={{

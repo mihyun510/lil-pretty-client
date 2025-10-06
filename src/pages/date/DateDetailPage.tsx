@@ -1,9 +1,12 @@
-import DateDetailForm from "@/components/date/DateDetailForm";
+import { DateDetailForm } from "@/components";
+import { useParams } from "react-router-dom";
 
 export default function DateDetailPage() {
+  const { dmCd } = useParams<{ dmCd: string }>();
+
   return (
     <div>
-      <DateDetailForm />
+      <DateDetailForm dmCd={dmCd} />
     </div>
   );
 }

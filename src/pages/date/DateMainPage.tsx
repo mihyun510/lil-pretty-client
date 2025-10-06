@@ -1,4 +1,4 @@
-import DateMainForm from "@/components/date/DateMainForm";
+import { DateMainForm } from "@/components";
 
 export default function DateMainPage() {
   return (

@@ -14,18 +14,23 @@ import { getDateDtlItems } from "@/api/dateDetailApi";
 import { useEffect, useState } from "react";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+interface DateDetailFormProps {
+  dmCd?: string; // useParams에서 undefined 가능성 때문에 optional 처리
+}
 
-export default function DateDetailForm() {
+export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
   const rankImages: Record<number, string> = {
     1: "/crown_1.png",
     2: "/crown_2.png",
     3: "/crown_3.png",
   };
-  const { dmCd } = useParams<{ dmCd: string }>();
+
   const [DateDtlItems, SetDateDtlItems] = useState<DateDtlItems[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
+    if (!dmCd) return;
+
     const fetchDateDtlCards = async () => {
       const response: CommonResponse<DateDtlItems[]> = await getDateDtlItems(
         dmCd
