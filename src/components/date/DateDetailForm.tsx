@@ -8,13 +8,17 @@ import {
   Button,
   Rating,
   IconButton,
+  listItemSecondaryActionClasses,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getDateDtlItems } from "@/api/dateDetailApi";
+import { getDateDtlItems, getDateDtlReviews } from "@/api/dateDetailApi";
+
 import { useEffect, useState } from "react";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
 import { useNavigate } from "react-router-dom";
+import { DateDtlReviews } from "@/api/interfaces/DateDtlReviews";
+
 interface DateDetailFormProps {
   dmCd?: string; // useParams에서 undefined 가능성 때문에 optional 처리
 }
@@ -27,7 +31,9 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
   };
 
   const [DateDtlItems, SetDateDtlItems] = useState<DateDtlItems[]>([]);
+  const [DateDtlReviews, SetDateDtlReviews] = useState<DateDtlReviews[]>([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!dmCd) return;
 
@@ -37,13 +43,30 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
       );
 
       if (response.data && response.ok) {
-        return SetDateDtlItems(response.data);
+        SetDateDtlItems(response.data);
+        fetchDateDtlReviews(response.data[0].dd_cd);
       } else {
         console.error("데이트 디테일 정보 조회 실패:", response.message);
       }
     };
+
     fetchDateDtlCards();
-  }, []);
+  }, [dmCd]);
+  const fetchDateDtlReviews = async (ddCd: string) => {
+    if (!ddCd) return;
+    const response: CommonResponse<DateDtlReviews[]> = await getDateDtlReviews(
+      ddCd
+    );
+
+    if (response.data && response.ok) {
+      return SetDateDtlReviews(response.data);
+    } else {
+      console.error("데이트 디테일 리뷰 정보 조회 실패:", response.message);
+    }
+  };
+  const goToDetail = (ddCd: string) => {
+    navigate(`/date/detailCourse/${ddCd}`);
+  };
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", py: 3 }}>
       <IconButton onClick={() => navigate("/date/main")}>
@@ -80,6 +103,7 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
                   <CardContent>
                     <Typography mt={1.5}>{item.dd_title}</Typography>
                     <CardMedia
+                      onClick={() => fetchDateDtlReviews(item.dd_cd)}
                       component="img"
                       image={item.dd_img}
                       sx={{ width: "100%", height: 300 }}
@@ -100,27 +124,28 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
                           backgroundColor: "#f06292",
                         },
                       }}
+                      onClick={() => goToDetail(item.dd_cd)}
                     >
                       코스 보기
                     </Button>
                   </CardContent>
                 </Card>
               </Box>
+              <Box mt={1} mb={3}>
+                <Typography fontWeight={800} color="grey">
+                  리뷰수:{item.dd_cnt}
+                </Typography>
+                <Typography fontWeight={800} color="grey">
+                  조회수:{item.dd_maxview}
+                </Typography>
+              </Box>
             </Grid>
           ))}
         </Grid>
         <Box display={"flex"} gap={50}>
-          <Box mt={3} mb={3}>
-            <Typography fontWeight={800} color="grey">
-              리뷰수:
-            </Typography>
-            <Typography fontWeight={800} color="grey">
-              조회수:
-            </Typography>
-          </Box>
           <Box textAlign={"center"}>
             <Typography
-              mt={3}
+              mt={-2}
               mb={3}
               fontWeight={500}
               fontSize={25}
@@ -135,8 +160,9 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
           spacing={4}
           justifyContent="center"
           alignItems="stretch" // 카드들을 아래로 정렬
+          mt={-3}
         >
-          {DateDtlItems.map((item, index) => (
+          {DateDtlReviews.map((item, index) => (
             <Grid item key={index}>
               <Box
                 sx={{
@@ -147,7 +173,7 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
               >
                 <CardMedia
                   component="img"
-                  image="/user_1.png"
+                  image={item.us_img}
                   sx={{
                     width: 60,
                     height: 50,
@@ -158,10 +184,14 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
                   }}
                 />
                 <Card sx={{ width: 370, height: 170 }}>
-                  <Typography variant="h6">김민정</Typography>
-                  <Rating name="size-small" defaultValue={2} size="small" />
+                  <Typography variant="h6">{item.us_id}</Typography>
+                  <Rating
+                    name="size-small"
+                    defaultValue={item.dr_star}
+                    size="small"
+                  />
                   <CardContent>
-                    <Typography>{item.dd_title}</Typography>
+                    <Typography>{item.dr_content}</Typography>
                   </CardContent>
                 </Card>
               </Box>

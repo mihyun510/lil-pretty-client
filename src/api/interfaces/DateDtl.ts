@@ -8,5 +8,5 @@ export interface DateDtlItems {
   dd_desc: string;
   dd_price: number;
   dd_rank: number;
-  dd_location: string;
+  dd_cnt: number;
 }
