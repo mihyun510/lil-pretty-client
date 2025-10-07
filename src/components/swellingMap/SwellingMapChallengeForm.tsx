@@ -29,8 +29,8 @@ export default function SwellingMapChallengeForm() {
     if (wd_ml < 0.5) return "/water_01.png"; //0L
     if (wd_ml < 1.0) return "/water_02.png"; //0.5L
     if (wd_ml < 1.5) return "/water_03.png"; //1.0L
-    if (wd_ml < 1.5) return "/water_03.png"; //1.5L
-    return "/water_04.png"; //2.0L
+    if (wd_ml < 2.0) return "/water_04.png"; //1.5L
+    return "/water_05.png"; //2.0L
   };
 
   //달력 날짜 변경 시 waterData의 wd_date 업데이트 + 데이터 재조회
@@ -149,14 +149,14 @@ export default function SwellingMapChallengeForm() {
 
         {/* 가운데 - 물방울 + 버튼 */}
         <Box sx={{ flex: 1, textAlign: "center" }}>
-          <Box
-            sx={{
-              width: 120,
-              height: 180,
-              mx: "auto",
-              mb: 2,
-              borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
-              background: "linear-gradient(to top, #80d0ff 60%, #b3e5fc 40%)",
+          <img
+            src={currentImage}
+            alt="물방울"
+            style={{
+              width: "400px",
+              height: "400px",
+              objectFit: "contain",
+              marginBottom: "10px",
             }}
           />
           <Box
@@ -192,11 +192,11 @@ export default function SwellingMapChallengeForm() {
         {/* 오른쪽 - 캐릭터 자리 */}
         <Box sx={{ flex: 1, textAlign: "center" }}>
           <img
-            src={currentImage}
+            src={"/bear_water.png"}
             alt="캐릭터"
             style={{
-              width: "200px",
-              height: "300px",
+              width: "400px",
+              height: "600px",
               objectFit: "contain",
             }}
           />
