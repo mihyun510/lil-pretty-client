@@ -126,21 +126,15 @@ export default function SwellingMapChallengeForm() {
       >
         {/* 왼쪽 - 텍스트 + 달력 */}
         <Box sx={{ flex: 1, textAlign: "center" }}>
-          <Typography
-            variant="h5"
-            sx={{
-              border: "3px solid pink",
-              borderRadius: "50%",
-              p: 4,
-              display: "inline-block",
-              fontWeight: "bold",
-              color: "#d75b73",
+          <img
+            src={"/hear_tool.png"}
+            alt="img"
+            style={{
+              width: "300px",
+              height: "300px",
+              objectFit: "contain",
             }}
-          >
-            붓기 빼기 챌린지 <br />
-            하루에 2리터를 <br />
-            채워라
-          </Typography>
+          />
 
           {/* 달력 */}
           <Box mt={3} display="flex" justifyContent="center">
