@@ -13,7 +13,6 @@ export async function getDateItems(
     });
 
     if (response.data.ok && response.data.data) {
-      console.log(response.data);
       return {
         ok: response.data.ok,
         data: response.data.data,
