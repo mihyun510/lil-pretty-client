@@ -192,11 +192,11 @@ export default function SwellingMapChallengeForm() {
         {/* 오른쪽 - 캐릭터 자리 */}
         <Box sx={{ flex: 1, textAlign: "center" }}>
           <img
-            src={"/bear_water.png"}
+            src={"/heart_bear.png"}
             alt="캐릭터"
             style={{
-              width: "400px",
-              height: "600px",
+              width: "500px",
+              height: "500px",
               objectFit: "contain",
             }}
           />
