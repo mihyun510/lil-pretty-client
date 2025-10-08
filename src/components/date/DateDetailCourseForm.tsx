@@ -3,14 +3,15 @@ import {
   Typography,
   Card,
   CardMedia,
-  CardContent,
+  IconButton,
   Grid,
 } from "@mui/material";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getDateDtlCourse } from "@/api/dateDetailApi";
 import { useEffect, useState } from "react";
 import { CommonResponse } from "@/api/interfaces/Common";
 import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
+import { useNavigate } from "react-router-dom";
 interface DateDetailCourseFormProps {
   ddCd?: string;
 }
@@ -34,8 +35,14 @@ export default function DateDetailCourseForm({
     };
     fetchDateCourseCards();
   }, [ddCd]);
+  const navigate = useNavigate();
   return (
-    <Box>
+    <Box sx={{ maxWidth: 1700, mx: "auto", py: 0 }}>
+      <IconButton onClick={() => navigate("/date/main")}>
+        <ArrowBackIcon
+          sx={{ ml: 10, mb: -9, fontSize: 30, color: "#f74782ff" }}
+        />
+      </IconButton>
       <Grid
         container
         spacing={4}
@@ -45,12 +52,23 @@ export default function DateDetailCourseForm({
       >
         {DateCourse.map((item, index) => (
           <Grid item key={index}>
-            <Card sx={{ width: 300, height: 350 }}>
-              <CardMedia component="img" image={`${item.dc_img}`}></CardMedia>
-              <CardContent></CardContent>
-            </Card>
-            <Typography variant="h6">{`${item.dc_title}`}</Typography>
-            <Typography sx={{ whiteSpace: "pre-line" }}>
+            <Box display={"flex"}>
+              <Card sx={{ width: 300, height: 350 }}>
+                <CardMedia component="img" image={`${item.dc_img}`}></CardMedia>
+              </Card>
+              <Typography
+                sx={{ ml: 3, mt: 20, fontSize: 30, color: "#f74782ff" }}
+              >
+                ▶
+              </Typography>
+            </Box>
+            <Typography
+              sx={{ mt: 2, fontWeight: 600 }}
+              variant="h5"
+            >{`${item.dc_title}`}</Typography>
+            <Typography
+              sx={{ mt: 2, width: 300, whiteSpace: "pre-line", fontSize: 16 }}
+            >
               {`${item.dc_desc}`}
             </Typography>
           </Grid>

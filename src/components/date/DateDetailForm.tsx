@@ -8,10 +8,13 @@ import {
   Button,
   Rating,
   IconButton,
-  listItemSecondaryActionClasses,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getDateDtlItems, getDateDtlReviews } from "@/api/dateDetailApi";
+import {
+  getDateDtlItems,
+  getDateDtlReviews,
+  saveDateDtlItems,
+} from "@/api/dateDetailApi";
 
 import { useEffect, useState } from "react";
 import { CommonResponse } from "@/api/interfaces/Common";
@@ -52,6 +55,18 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
 
     fetchDateDtlCards();
   }, [dmCd]);
+  const goToDetail = (ddCd: string) => {
+    navigate(`/date/detailCourse/${ddCd}`);
+  };
+  const toggleLike = async (index: number) => {
+    const DateDtlItem = DateDtlItems[index];
+    const res = await saveDateDtlItems(DateDtlItem.dd_cd, DateDtlItem.dm_cd);
+    if (!res.ok) {
+      console.error(res.message);
+      return;
+    }
+    goToDetail(DateDtlItem.dd_cd);
+  };
   const fetchDateDtlReviews = async (ddCd: string) => {
     if (!ddCd) return;
     const response: CommonResponse<DateDtlReviews[]> = await getDateDtlReviews(
@@ -64,9 +79,7 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
       console.error("데이트 디테일 리뷰 정보 조회 실패:", response.message);
     }
   };
-  const goToDetail = (ddCd: string) => {
-    navigate(`/date/detailCourse/${ddCd}`);
-  };
+
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", py: 3 }}>
       <IconButton onClick={() => navigate("/date/main")}>
@@ -124,7 +137,9 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
                           backgroundColor: "#f06292",
                         },
                       }}
-                      onClick={() => goToDetail(item.dd_cd)}
+                      onClick={() => {
+                        toggleLike(index);
+                      }}
                     >
                       코스 보기
                     </Button>
