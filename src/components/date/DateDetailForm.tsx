@@ -56,7 +56,7 @@ export default function DateDetailForm({ dmCd }: DateDetailFormProps) {
     fetchDateDtlCards();
   }, [dmCd]);
   const goToDetail = (ddCd: string) => {
-    navigate(`/date/detailCourse/${ddCd}`);
+    navigate(`/date/detailCourse/${ddCd}/${dmCd}`);
   };
   const toggleLike = async (index: number) => {
     const DateDtlItem = DateDtlItems[index];

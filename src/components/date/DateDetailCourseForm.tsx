@@ -14,10 +14,12 @@ import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
 import { useNavigate } from "react-router-dom";
 interface DateDetailCourseFormProps {
   ddCd?: string;
+  dmCd?: string;
 }
 
 export default function DateDetailCourseForm({
   ddCd,
+  dmCd,
 }: DateDetailCourseFormProps) {
   const [DateCourse, SetDateCourse] = useState<DateDtlCourse[]>([]);
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function DateDetailCourseForm({
   const navigate = useNavigate();
   return (
     <Box sx={{ maxWidth: 1700, mx: "auto", py: 0 }}>
-      <IconButton onClick={() => navigate("/date/main")}>
+      <IconButton onClick={() => navigate(`/date/detail/${dmCd}`)}>
         <ArrowBackIcon
           sx={{ ml: 10, mb: -9, fontSize: 30, color: "#f74782ff" }}
         />
@@ -56,11 +58,13 @@ export default function DateDetailCourseForm({
               <Card sx={{ width: 300, height: 350 }}>
                 <CardMedia component="img" image={`${item.dc_img}`}></CardMedia>
               </Card>
-              <Typography
-                sx={{ ml: 3, mt: 20, fontSize: 30, color: "#f74782ff" }}
-              >
-                ▶
-              </Typography>
+              {index < DateCourse.length - 1 && (
+                <Typography
+                  sx={{ ml: 3, mt: 20, fontSize: 30, color: "#f74782ff" }}
+                >
+                  ▶
+                </Typography>
+              )}
             </Box>
             <Typography
               sx={{ mt: 2, fontWeight: 600 }}
