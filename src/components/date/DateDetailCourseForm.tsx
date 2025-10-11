@@ -56,7 +56,11 @@ export default function DateDetailCourseForm({
           <Grid item key={index}>
             <Box display={"flex"}>
               <Card sx={{ width: 300, height: 350 }}>
-                <CardMedia component="img" image={`${item.dc_img}`}></CardMedia>
+                <CardMedia
+                  sx={{ width: "100%", objectFit: "cover", height: 350 }}
+                  component="img"
+                  image={`${item.dc_img}`}
+                ></CardMedia>
               </Card>
               {index < DateCourse.length - 1 && (
                 <Typography

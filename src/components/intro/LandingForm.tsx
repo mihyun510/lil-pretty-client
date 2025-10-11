@@ -1,6 +1,9 @@
-// src/pages/Landing.tsx
 import { Box, Typography } from "@mui/material";
 import "./Landing.css";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/swiper-bundle.css";
 
 export default function LandingForm() {
   return (
@@ -16,11 +19,34 @@ export default function LandingForm() {
           alt="짠예살롱 캐릭터"
           className="landing-bear-image"
         />
-        <img
-          src="/intro_1.png"
-          alt="인트로 이미지"
-          className="landing-intro1-image"
-        />
+
+        <Box>
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            slidesPerView={1}
+            loop
+            autoplay={{ delay: 2500, disableOnInteraction: false }}
+            pagination={{ clickable: true }}
+            className="landing-intro1-image"
+            style={
+              {
+                "--swiper-pagination-color": "#fff",
+                "--swiper-pagination-bullet-size": "16px",
+              } as React.CSSProperties
+            }
+          >
+            {/* 데모처럼 텍스트 슬라이드 */}
+            <SwiperSlide>
+              <img src="/home_08.jpg" className="slide-img" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/home_02.jpg" className="slide-img" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/love.jpg" className="slide-img" />
+            </SwiperSlide>
+          </Swiper>
+        </Box>
       </Box>
       <Box className="landing-text">
         <Typography

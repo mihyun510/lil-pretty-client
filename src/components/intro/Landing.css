@@ -5,7 +5,6 @@
   padding: 0;
   margin: 0;
   overflow: hidden; /* 넘치는 이미지 잘라냄 */
-  
 }
 
 .landing-logo-image {
@@ -32,20 +31,17 @@
   z-index: 2; /* 로고보다 뒤에 보이도록 설정 */
 }
 .landing-intro1-image {
-  position: absolute;
-  height: 430px;
+  height: 460px;
   width: 900px;
   z-index: 1;
-  right: 500px;
-  top: 40%;
-
+  right: 0px;
+  top: 100%;
+  margin-top: 11%;
   border-radius: 30px; /* 더 동글동글하게 */
-
   object-fit: cover;
   box-shadow: 0 0 25px rgb(208, 155, 174); /* 테두리랑 어울리는 핑크빛 그림자 */
   transition: transform 0.3s ease, box-shadow 0.5s ease; /* 부드럽게 효과 변화 */
 }
-
 .landing-text {
   position: absolute; /* 원하는 위치에 고정 배치 */
   top: 500px; /* 로고 아래로 550px 내려서 배치 */
@@ -54,4 +50,12 @@
   z-index: 3; /* 이미지 위에 보이도록 설정 */
   color: #fff; /* 글자 색 흰색 */
   font-size: 200px; /* 폰트 크기 2배 (기본 1rem의 2배) */
+}
+/* 이미지 슬라이드용 */
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px;
 }
