@@ -1,4 +1,4 @@
-# Diet & Date Web
+# 조금 예뻐도 돼?(Diet & Date Web)
 
 > **Vite + React + TypeScript** 웹 사이드 프로젝트
 
