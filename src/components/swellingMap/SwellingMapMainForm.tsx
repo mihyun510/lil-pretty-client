@@ -25,7 +25,7 @@ export default function SwellingMapMainForm() {
     []
   );
   const [page, setPage] = useState(1); // 현재 페이지
-  const itemsPerPage = 10; // 한 페이지에 표시할 카드 수
+  const itemsPerPage = 4; // 한 페이지에 표시할 카드 수
   const categories = ["00001", "00002", "00003"];
 
   const fetchPlaces = async (category: string) => {
