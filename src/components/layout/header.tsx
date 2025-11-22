@@ -147,7 +147,7 @@ export default function Header() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/swellingmap/map");
+                      navigate("/admin/swellingmap/mapset");
                       handleMouseLeave();
                     }}
                   >
