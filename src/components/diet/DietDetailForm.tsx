@@ -8,6 +8,8 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
@@ -25,6 +27,13 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
   const [mealDtl, setMealDtl] = useState<MealDtlItems[]>([]);
   const [mealFavorite, setMealFavorite] = useState<MealFavoriteItems[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(mealFavorite.length / itemsPerPage);
+  const paginatedFavorite = mealFavorite.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
   const navigate = useNavigate();
   const fetchMealFavoriteItems = async () => {
     setLoading(true);
@@ -54,6 +63,13 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
     fetchDetail();
     fetchMealFavoriteItems();
   }, [mmCd]);
+
+  const handleNextPage = () => {
+    setPage((prev) => Math.min(prev + 1, totalPages || 1));
+  };
+  const handlePrevPage = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+  };
 
   if (loading || mealDtl.length === 0) {
     return (
@@ -198,8 +214,13 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
         mt={1}
         sx={{ gap: 8, display: "flex", mx: 20 }}
       >
-        {mealFavorite.length > 0 ? (
-          mealFavorite.map((fav, idx) => (
+        <IconButton onClick={handlePrevPage}>
+          <ChevronLeftIcon sx={{ fontSize: 100, color: "#f74782ff" }}>
+            ◀
+          </ChevronLeftIcon>
+        </IconButton>
+        {paginatedFavorite.length > 0 ? (
+          paginatedFavorite.map((fav, idx) => (
             <Grid item xs={4} key={fav.mf_cd || idx}>
               <Card
                 sx={{
@@ -248,6 +269,15 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
             찜한 음식이 없습니다.
           </Typography>
         )}
+
+        <IconButton>
+          <ChevronRightIcon
+            sx={{ fontSize: 100, color: "#f74782ff" }}
+            onClick={handleNextPage}
+          >
+            ▶
+          </ChevronRightIcon>
+        </IconButton>
       </Grid>
     </Box>
   );
