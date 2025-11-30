@@ -4,6 +4,6 @@ export default function DateMainPage() {
   return (
     <div>
       <DateMainForm />
-    </div>
+   </div>
   );
 }

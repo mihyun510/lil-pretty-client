@@ -16,9 +16,12 @@ export const uploadFile = async (file: File): Promise<string> => {
 export const downloadFile = async (filePath: string) => {
   // 폴더와 파일명 분리
   const parts = filePath.split("/");
+  console.log("partsq::" + parts);
   const folder = encodeURIComponent(parts[0]);
+
   const fileName = encodeURIComponent(parts.slice(1).join("/")); // 나머지 경로
 
+  console.log("fileName::" + fileName);
   const res = await apiInstance.get(`/file/download/${folder}/${fileName}`, {
     responseType: "blob",
   });

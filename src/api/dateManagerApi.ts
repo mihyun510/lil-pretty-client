@@ -1,14 +1,14 @@
 import { apiInstance } from "./common/axiosInstance";
 import { CommonResponse } from "@/api/interfaces/Common";
-import { DateDtlItems } from "@/api/interfaces/DateDtl";
-import { DateDtlReviews } from "./interfaces/DateDtlReviews";
+import { DateDtlItems } from "./interfaces/DateDtl";
 import { DateDtlCourse } from "./interfaces/DateDtlCourse";
 
-export async function getDateDtlItems(
+//다이어트 존 코스
+export async function getDateCourse(
   dmCd: string
 ): Promise<CommonResponse<DateDtlItems[]>> {
   try {
-    const response = await apiInstance.post("/date/detail/getDateDtlItems", {
+    const response = await apiInstance.post("/date/manager/getDateCourse", {
       dmCd,
     });
     if (response.data.ok && response.data.data) {
@@ -24,49 +24,23 @@ export async function getDateDtlItems(
       };
     }
   } catch (error) {
-    console.error("getMst Error:", error);
+    console.log("getMst Error:", error);
     return {
       ok: false,
       message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
     };
   }
-}
-//데이트 존 리뷰 조회
-export async function getDateDtlReviews(
-  ddCd: string
-): Promise<CommonResponse<DateDtlReviews[]>> {
-  try {
-    const response = await apiInstance.post("/date/detail/getDateDtlReviews", {
-      ddCd,
-    });
-    if (response.data.ok && response.data.data) {
-      return {
-        data: response.data.data,
-        ok: response.data.ok,
-        message: response.data.message,
-      };
-    } else {
-      return {
-        ok: false,
-        message: response.data.message || "데이터를 불러올 수 없습니다.",
-      };
-    }
-  } catch (error) {
-    console.error("getMst Error:", error);
-    return {
-      ok: false,
-      message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
-    };
-  }
-}
-//데이트 존 상세 코스 조회
-export async function getDateDtlCourse(
+} //데이트 존 상세코스
+export async function getDetailDateCourse(
   ddCd: string
 ): Promise<CommonResponse<DateDtlCourse[]>> {
   try {
-    const response = await apiInstance.post("/date/detail/getDateDtlCourse", {
-      ddCd,
-    });
+    const response = await apiInstance.post(
+      "/date/manager/getDetailDateCourse",
+      {
+        ddCd,
+      }
+    );
     if (response.data.ok && response.data.data) {
       return {
         data: response.data.data,
@@ -80,21 +54,17 @@ export async function getDateDtlCourse(
       };
     }
   } catch (error) {
-    console.error("getMst Error:", error);
+    console.log("getMst Error:", error);
     return {
       ok: false,
       message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
     };
   }
 }
-//리뷰수 저장
-export async function saveDateDtlItems(
-  ddCd: string,
-  dmCd: string
-): Promise<CommonResponse<{ updated: number }>> {
+//다이어트 존 코스
+export async function insertDateCourse(dmCd: string) {
   try {
-    const response = await apiInstance.post("/date/detail/saveDateDtlItems", {
-      ddCd,
+    const response = await apiInstance.post("/date/manager/DateCourse", {
       dmCd,
     });
     if (response.data.ok && response.data.data) {
@@ -110,10 +80,26 @@ export async function saveDateDtlItems(
       };
     }
   } catch (error) {
-    console.error("saveDateDtlItems Error:", error);
+    console.log("getMst Error:", error);
     return {
       ok: false,
       message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
     };
+  }
+}
+//데이트 코스 수정
+export async function updateDateCourse(
+  dmCd: string,
+  DateCourse: DateDtlItems[]
+) {
+  try {
+    console.log("dmCd::" + dmCd);
+    console.log("DateCourse::" + DateCourse);
+    await apiInstance.post("/date/manager/updateDateCourse", {
+      dmCd: dmCd,
+      DateCourse: DateCourse,
+    });
+  } catch (error) {
+    console.log("getMst Error:", error);
   }
 }
