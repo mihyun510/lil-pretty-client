@@ -2,6 +2,8 @@ import {
   getDateCourse,
   updateDateCourse,
   getDetailDateCourse,
+  deleteDateCourse,
+  deleteDetailDateCourse,
 } from "@/api/dateManagerApi";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
 import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
@@ -22,6 +24,7 @@ import {
   Card,
   CardMedia,
   CardContent,
+  colors,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 export default function DateManagerForm() {
@@ -29,26 +32,21 @@ export default function DateManagerForm() {
   const [DetailDateCourse, SetDetailDateCourse] = useState<DateDtlCourse[]>([]);
   const [dmCd, setDmCd] = useState("");
   const [ddCd, setDdCd] = useState("");
+  const [dcCd, setDcCd] = useState("");
   const navigate = useNavigate();
-
+  const FetchDateCourse = async (dmCd: string) => {
+    const response: CommonResponse<DateDtlItems[]> = await getDateCourse(dmCd);
+    if (response.ok && response.data) {
+      return SetDateCourse(response.data);
+    } else {
+      console.error("데이트 정보 조회 실패:", response.message);
+    }
+  };
   useEffect(() => {
-    console.log("dsdsdsdsd::" + dmCd);
-    const FetchDateCourse = async (dmCd: string) => {
-      const response: CommonResponse<DateDtlItems[]> = await getDateCourse(
-        dmCd
-      );
-      if (response.ok && response.data) {
-        return SetDateCourse(response.data);
-      } else {
-        console.error("데이트 정보 조회 실패:", response.message);
-      }
-    };
-
     FetchDateCourse(dmCd);
   }, [dmCd]);
 
   const FetchDetailDateCourse = async (ddCd: string) => {
-    console.log("민정테스트" + ddCd);
     const response: CommonResponse<DateDtlCourse[]> = await getDetailDateCourse(
       ddCd
     );
@@ -62,7 +60,7 @@ export default function DateManagerForm() {
     const newRow: DateDtlItems = {
       // 실제 API 타입에 맞게 필드 이름과 기본값을 조정해야 합니다.
       // 예시:
-      dd_cd: `${dmCd + 1}`, // 임시 고유 ID
+      dd_cd: "", // 임시 고유 ID
       dd_title: "",
       dd_img: "",
       dd_desc: "",
@@ -71,22 +69,45 @@ export default function DateManagerForm() {
     // 2. 기존 배열을 복사하고 새로운 행을 추가한 후 상태를 업데이트합니다.
     SetDateCourse((prevCourse) => [...prevCourse, newRow]);
   };
-  const onDeleteRow = () => {
-    const delRow: DateDtlItems = {
-      // 실제 API 타입에 맞게 필드 이름과 기본값을 조정해야 합니다.
-      // 예시:
-      dd_cd: `${dmCd + 1}`, // 임시 고유 ID
-      dd_title: "",
-      dd_img: "",
-      dd_desc: "",
-    };
 
-    // 2. 기존 배열을 복사하고 새로운 행을 추가한 후 상태를 업데이트합니다.
-    SetDateCourse((prevCourse) => [...prevCourse, newRow]);
+  const onDelete = async () => {
+    const FetchDateCourse = async (dmCd: string) => {
+      const response: CommonResponse<DateDtlItems[]> = await getDateCourse(
+        dmCd
+      );
+      if (response.ok && response.data) {
+        return SetDateCourse(response.data);
+      } else {
+        console.error("데이트 정보 조회 실패:", response.message);
+      }
+    };
+    const deleteResponse: CommonResponse<DateDtlItems[]> =
+      await deleteDateCourse(ddCd);
+    console.log("deleteResponse::" + deleteResponse.ok);
+    if (deleteResponse.ok) {
+      alert("삭제되었습니다.");
+      FetchDateCourse(dmCd);
+    }
+  };
+  const onDetailDelete = async () => {
+    const FetchDateCourse = async (dcCd: string) => {
+      const response: CommonResponse<DateDtlCourse[]> =
+        await getDetailDateCourse(dcCd);
+      if (response.ok && response.data) {
+        return SetDateCourse(response.data);
+      } else {
+        console.error("데이트 정보 조회 실패:", response.message);
+      }
+    };
+    const deleteResponse: CommonResponse<DateDtlCourse[]> =
+      await deleteDetailDateCourse(dcCd);
+    console.log("deleteResponse::" + deleteResponse.ok);
+    if (deleteResponse.ok) {
+      alert("삭제되었습니다.");
+      FetchDetailDateCourse(ddCd);
+    }
   };
   const onUpdate = async () => {
-    console.log("dmCd::" + dmCd);
-    console.log("DateCourse::" + DateCourse);
     await updateDateCourse(dmCd, DateCourse);
   };
   const handleChange = (
@@ -106,7 +127,6 @@ export default function DateManagerForm() {
     );
   };
   const handleDateCodeChange = (value: string) => {
-    console.log("와우::" + value);
     setDmCd(value);
   };
   const headers = [
@@ -134,12 +154,23 @@ export default function DateManagerForm() {
   }
   return (
     <Box>
-      <Typography sx={{ fontSize: "30px" }}>데이트 존 관리</Typography>
+      <Typography sx={{ fontSize: "25px", color: "grey", fontWeight: "bold" }}>
+        데이트 존 관리
+      </Typography>
       <Box display={"flex"}>
-        <Typography sx={{ fontSize: "25px" }}>데이트 유형</Typography>
+        <Typography sx={{ fontSize: "20px", ml: 3, fontWeight: "bold", mr: 2 }}>
+          데이트 유형
+        </Typography>
         <select
           id="dateCode"
           name="dateCode"
+          style={{
+            color: "black",
+            backgroundColor: "white",
+            padding: "8px",
+            border: "2px solid pink",
+            borderRadius: "10px",
+          }}
           onChange={(e) => handleDateCodeChange(e.target.value)}
         >
           <option value="">선택하세요</option>
@@ -148,14 +179,53 @@ export default function DateManagerForm() {
           <option value="DM00000003">액티비티 데이트</option>
         </select>
       </Box>
-      <Box display={"flex"}>
-        <Typography>데이트 코스</Typography>
-        <button onClick={onaddRow}>행 추가</button>
-        <button onClick={onDeleteRow}>행 삭제</button>
-        <button onClick={onUpdate}>저장</button>
+      <Box display={"flex"} gap={1} mb={1} ml={2}>
+        <Typography mr={104} sx={{ fontWeight: "bold" }}>
+          데이트 코스
+        </Typography>
+        <button
+          style={{
+            backgroundColor: "#f29bb8",
+            color: "white",
+            borderRadius: "8px",
+            borderColor: "white",
+          }}
+          onClick={onaddRow}
+        >
+          행 추가
+        </button>
+        <button
+          style={{
+            backgroundColor: "#f29bb8",
+            color: "white",
+            borderRadius: "8px",
+            borderColor: "white",
+          }}
+          onClick={onDelete}
+        >
+          행 삭제
+        </button>
+        <button
+          style={{
+            backgroundColor: "#f29bb8",
+            color: "white",
+            borderRadius: "8px",
+            borderColor: "white",
+          }}
+          onClick={onUpdate}
+        >
+          저장
+        </button>
       </Box>
-      <Box display={"flex"}>
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Box display={"flex"} gap={20} ml={2}>
+        <Paper
+          sx={{
+            width: "100%",
+            overflow: "hidden",
+            border: 2,
+            borderColor: "pink",
+          }}
+        >
           <Table sx={{ minWidth: 400 }}>
             {/* 테이블 헤더 (여기는 이미 잘 되어 있었어요!) */}
             <TableHead>
@@ -173,11 +243,15 @@ export default function DateManagerForm() {
               {/* 1. items 배열을 반복하여 행(<TableRow>)을 만듭니다. */}
               {DateCourse.map((item, index) => (
                 <TableRow
+                  sx={{
+                    border: 2,
+                    borderColor: "pink",
+                  }}
                   key={index} // 행마다 고유한 key를 줍니다.
                 >
                   <TableCell>
                     {" "}
-                    <Checkbox></Checkbox>
+                    <Checkbox onChange={() => setDdCd(item.dd_cd)}> </Checkbox>
                   </TableCell>
                   <TableCell>
                     {/* 3. item[header.value]로 알맞은 데이터를 넣습니다. */}
@@ -189,13 +263,9 @@ export default function DateManagerForm() {
                         handleChange(index, "dd_title", e.target.value);
                       }}
                       value={`${item.dd_title}`}
-                    >
-                      {/* 3. item[header.value]로 알맞은 데이터를 넣습니다. */}
-                    </TextField>
+                    ></TextField>
                   </TableCell>
                   <TableCell>
-                    {/* 3. item[header.value]로 알맞은 데이터를 넣습니다. */}
-
                     <TextField
                       onChange={(e) => {
                         handleChange(index, "dd_img", e.target.value);
@@ -222,23 +292,45 @@ export default function DateManagerForm() {
           </Table>
         </Paper>
         <Box display="flex" flexDirection="column" gap={2}>
+          <button>+</button>
           {DetailDateCourse.map((item, index) => (
-            <Grid item key={index}>
-              <Card>
-                <CardMedia>이미지등록해라</CardMedia>
-                <button>이미지 등록</button>
-                <button>x</button>
-                <CardContent>
-                  <Box sx={{ background: "white" }}>
-                    <Typography>제목:{item.dc_title}</Typography>
+            <Grid item key={index} mr={5}>
+              <Card sx={{ background: "pink", border: 2, borderColor: "red" }}>
+                <Box display={"flex"}>
+                  <CardMedia>
+                    <span>이미지등록해라</span>
+                    <button
+                      style={{
+                        backgroundColor: "#f29bb8",
+                        color: "white",
+                        borderRadius: "8px",
+                        borderColor: "white",
+                      }}
+                    >
+                      이미지 등록
+                    </button>
+                  </CardMedia>
 
-                    <Typography>{item.dc_desc}</Typography>
-                  </Box>
-                  <Box display="flex">
-                    <label>총 가격:{222222222222}</label>
-                    <input type="text" value={222}></input>
-                  </Box>
-                </CardContent>
+                  <CardContent>
+                    <button
+                      onClick={() => {
+                        setDcCd(item.dc_cd);
+                        onDetailDelete();
+                      }}
+                    >
+                      x
+                    </button>
+                    <Box sx={{ background: "white" }}>
+                      <Typography>제목:{item.dc_title}</Typography>
+
+                      <Typography>{item.dc_desc}</Typography>
+                    </Box>
+                    <Box display="flex">
+                      <label>총 가격:{}</label>
+                      <input type="text" value={222}></input>
+                    </Box>
+                  </CardContent>
+                </Box>
               </Card>
             </Grid>
           ))}

@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import { Button } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -8,16 +8,30 @@ import styles from "./headerFooter.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAuthModalStore } from "@/store/useAuthModalStore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Header() {
-  const { isLoggedIn, logout } = useAuthStore();
+  const { isLoggedIn, logout, user } = useAuthStore();
   const { openLoginModal } = useAuthModalStore();
   const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const handleLogout = () => {
     logout();
     navigate("/");
     openLoginModal();
+  };
+
+  // ✅ 마우스 올리면 메뉴 열기
+  const handleMouseEnter = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // ✅ 마우스가 메뉴 영역 벗어나면 닫기
+  const handleMouseLeave = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -56,6 +70,93 @@ export default function Header() {
             >
               붓기맵
             </Button>
+
+            {/* ✅ 관리자 전용 메뉴 (드롭다운) */}
+            {user?.usRole === "ADMIN" && (
+              <div
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                style={{ display: "inline-block" }}
+              >
+                <Button
+                  id="admin-menu-button"
+                  aria-controls={open ? "admin-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  sx={{
+                    color: "#000000",
+                    fontWeight: "bold",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                >
+                  관리자 MENU ▼
+                </Button>
+                <Menu
+                  id="admin-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMouseLeave}
+                  MenuListProps={{
+                    onMouseEnter: () => setAnchorEl(anchorEl),
+                    onMouseLeave: handleMouseLeave,
+                    sx: {
+                      borderRadius: 2,
+                      mt: 1,
+                    },
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/users/auth");
+                      handleMouseLeave();
+                    }}
+                  >
+                    사용자 권한 관리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/commcode");
+                      handleMouseLeave();
+                    }}
+                  >
+                    공통코드 관리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/meal");
+                      handleMouseLeave();
+                    }}
+                  >
+                    식단 관리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/meal/rec");
+                      handleMouseLeave();
+                    }}
+                  >
+                    추천 식단 관리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/date/course");
+                      handleMouseLeave();
+                    }}
+                  >
+                    데이트 코스 관리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/swellingmap/mapset");
+                      handleMouseLeave();
+                    }}
+                  >
+                    붓기맵 맵 관리
+                  </MenuItem>
+                </Menu>
+              </div>
+            )}
+
             <Button
               variant="contained"
               className={styles.logoutButton}

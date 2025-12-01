@@ -93,12 +93,61 @@ export async function updateDateCourse(
   DateCourse: DateDtlItems[]
 ) {
   try {
-    console.log("dmCd::" + dmCd);
-    console.log("DateCourse::" + DateCourse);
-    await apiInstance.post("/date/manager/updateDateCourse", {
-      dmCd: dmCd,
-      DateCourse: DateCourse,
+    await apiInstance.post("/date/manager/saveDateCourse", {
+      dmCd,
+      DateCourse,
     });
+  } catch (error) {
+    console.log("getMst Error:", error);
+  }
+}
+//데이트 코스 삭제
+export async function deleteDateCourse(ddCd: string) {
+  try {
+    console.log("ddCd::" + ddCd);
+
+    const response = await apiInstance.post("/date/manager/deleteDateCourse", {
+      ddCd,
+    });
+    if (response.data.ok && response.data.data) {
+      return {
+        data: response.data.data,
+        ok: response.data.ok,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        ok: false,
+        message: response.data.message || "데이터를 불러올 수 없습니다.",
+      };
+    }
+  } catch (error) {
+    console.log("getMst Error:", error);
+  }
+}
+//데이트 상세 코스 삭제
+export async function deleteDetailDateCourse(dcCd: string) {
+  try {
+    console.log("ddCd::" + dcCd);
+
+    const response = await apiInstance.post(
+      "/date/manager/deleteDetailDateCourse",
+      {
+        dcCd,
+      }
+    );
+    if (response.data.ok && response.data.data) {
+      return {
+        data: response.data.data,
+        ok: response.data.ok,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        ok: false,
+        message: response.data.message || "데이터를 불러올 수 없습니다.",
+      };
+    }
   } catch (error) {
     console.log("getMst Error:", error);
   }
