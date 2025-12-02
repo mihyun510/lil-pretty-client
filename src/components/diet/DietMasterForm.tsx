@@ -9,6 +9,7 @@ import {
   Typography,
   IconButton,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -23,7 +24,13 @@ export default function DietMasterForm() {
   const [meals, setMeals] = useState<MealItems[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 4; // 한 페이지에 표시할 카드 수
+  const totalPages = Math.ceil(meals.length / itemsPerPage);
+  const paginatedMeals = meals.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
   const priceCategories = ["00001", "00002", "00003"];
 
   const fetchMeals = async (mmCategory: string) => {
@@ -43,6 +50,9 @@ export default function DietMasterForm() {
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
+  };
+  const handleChangePage = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   const toggleLike = async (index: number) => {
@@ -109,86 +119,96 @@ export default function DietMasterForm() {
             <CircularProgress />
           </Box>
         ) : (
-          <Grid container spacing={3} sx={{ mt: 2 }}>
-            {meals.map((meal, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card sx={{ backgroundColor: "#fffafbff" }}>
-                  <Box
-                    sx={{
-                      width: "370px",
-                      position: "relative",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => goToDetail(meal.mm_cd)}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="160"
-                      width="320px"
-                      image={"/" + meal.mm_img}
-                      alt={meal.mm_title}
-                      sx={{
-                        height: "200px",
-                        width: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </Box>
-                  <CardContent>
+          <>
+            <Grid container spacing={3} sx={{ mt: 2 }}>
+              {paginatedMeals.map((meal, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4}>
+                  <Card sx={{ backgroundColor: "#fffafbff" }}>
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        width: "370px",
                         position: "relative",
+                        cursor: "pointer",
                       }}
+                      onClick={() => goToDetail(meal.mm_cd)}
                     >
-                      {" "}
-                      <Typography
-                        mt={0}
-                        variant="subtitle1"
-                        fontWeight={"bold"}
-                        fontSize={"20px"}
-                        color="grey"
-                      >
-                        {meal.mm_title}
-                      </Typography>
-                      <IconButton
-                        onClick={() => toggleLike(index)}
+                      <CardMedia
+                        component="img"
+                        height="160"
+                        width="320px"
+                        image={"/" + meal.mm_img}
+                        alt={meal.mm_title}
                         sx={{
-                          color: "#f06292",
-                          "&:hover": { backgroundColor: "#f0f0f0" },
+                          height: "200px",
+                          width: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Box>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          position: "relative",
                         }}
                       >
-                        {meal.favorite == "Y" ? (
-                          <FavoriteIcon sx={{ fontSize: 35 }} />
-                        ) : (
-                          <FavoriteBorderIcon sx={{ fontSize: 35 }} />
-                        )}
-                      </IconButton>
-                    </Box>
+                        {" "}
+                        <Typography
+                          mt={0}
+                          variant="subtitle1"
+                          fontWeight={"bold"}
+                          fontSize={"20px"}
+                          color="grey"
+                        >
+                          {meal.mm_title}
+                        </Typography>
+                        <IconButton
+                          onClick={() => toggleLike(index)}
+                          sx={{
+                            color: "#f06292",
+                            "&:hover": { backgroundColor: "#f0f0f0" },
+                          }}
+                        >
+                          {meal.favorite == "Y" ? (
+                            <FavoriteIcon sx={{ fontSize: 35 }} />
+                          ) : (
+                            <FavoriteBorderIcon sx={{ fontSize: 35 }} />
+                          )}
+                        </IconButton>
+                      </Box>
 
-                    <Typography
-                      mt={-2}
-                      variant="body2"
-                      color="text.secondary"
-                      fontSize={"18px"}
-                    >
-                      {meal.mm_desc}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      mt={0}
-                      color="grey"
-                      fontSize={"15px"}
-                    >
-                      칼로리: {meal.mm_kcal}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                      <Typography
+                        mt={-2}
+                        variant="body2"
+                        color="text.secondary"
+                        fontSize={"18px"}
+                      >
+                        {meal.mm_desc}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        mt={0}
+                        color="grey"
+                        fontSize={"15px"}
+                      >
+                        칼로리: {meal.mm_kcal}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handleChangePage}
+                color="primary"
+              />
+            </Box>
+          </>
         )}
       </Box>
     </div>
