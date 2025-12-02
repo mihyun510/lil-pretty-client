@@ -9,7 +9,7 @@ import {
   SwellingMapMainPage,
   DateMainPage,
   DateDetailCoursePage,
-  DateManagerPage
+  DateManagerPage,
 } from "@/pages";
 
 export const appRoutes = [

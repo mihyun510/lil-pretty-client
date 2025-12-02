@@ -123,7 +123,7 @@ export default function Header() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/meal");
+                      navigate("/admin/meal/main");
                       handleMouseLeave();
                     }}
                   >
