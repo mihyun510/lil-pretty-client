@@ -9,3 +9,4 @@ export {
   KakaoMapForm,
 } from "./swellingMap";
 export { DateMainForm, DateDetailForm, DateDetailCourseForm } from "./date";
+export { MealMainForm, MealDetailForm, MealRecForm } from "./admin";
