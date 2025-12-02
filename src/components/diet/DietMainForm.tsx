@@ -154,6 +154,7 @@ export default function DietMainForm() {
               </Grid>
             ))}
           </Grid>
+          
         </Box>
         {/* 오른쪽: 전신사진 + 텍스트 */}
         <Box

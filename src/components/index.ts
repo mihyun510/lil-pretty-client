@@ -8,4 +8,9 @@ export {
   SwellingMapMainForm,
   KakaoMapForm,
 } from "./swellingMap";
-export { DateMainForm, DateDetailForm, DateDetailCourseForm } from "./date";
+export {
+  DateMainForm,
+  DateDetailForm,
+  DateDetailCourseForm,
+  DateManagerForm,
+} from "./date";

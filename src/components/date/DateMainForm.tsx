@@ -41,8 +41,12 @@ export default function DateMainForm() {
   const goToDetail = (dmCd: string) => {
     navigate(`/date/detail/${dmCd}`);
   };
+  const goToManager = () => {
+    navigate(`/date/manager/`);
+  };
   return (
     <Box sx={{ maxWidth: 1120, mx: "auto", py: 3 }}>
+      <Box onClick={goToManager}>민정</Box>
       <Box sx={{ textAlign: "center" }}>
         <Typography
           sx={{
