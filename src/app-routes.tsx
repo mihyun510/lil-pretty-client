@@ -9,7 +9,9 @@ import {
   SwellingMapMainPage,
   DateMainPage,
   DateDetailCoursePage,
-  DateManagerPage,
+  MealMainPage,
+  MealDetailPage,
+  MealRecPage,
 } from "@/pages";
 
 export const appRoutes = [
@@ -23,7 +25,9 @@ export const appRoutes = [
   { path: "/date/main", element: <DateMainPage /> },
   { path: "/date/detail/:dmCd", element: <DateDetailPage /> },
   { path: "/date/detailCourse/:ddCd/:dmCd", element: <DateDetailCoursePage /> },
-  { path: "/date/manager", element: <DateManagerPage /> },
+  { path: "/admin/meal/main", element: <MealMainPage /> },
+  { path: "/admin/meal/detail", element: <MealDetailPage /> },
+  { path: "/admin/meal/rec", element: <MealRecPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
