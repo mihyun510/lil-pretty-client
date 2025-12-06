@@ -1,0 +1,28 @@
+.AuthInput {
+  /* 인라인 스타일에서 가져온 속성들 */
+
+  border-radius: 3px !important; /* 모서리 둥글게 */
+  border-color: #f29bb8 !important; /* 테두리 색상 */
+  border-width: 3px !important; /* 모서리 둥글게 */
+}
+.AuthButton {
+  /* 인라인 스타일에서 가져온 속성들 */
+  background-color: #f29bb8 !important; /* 배경색 */
+  color: white !important; /* 글자색 */
+  border-radius: 8px !important; /* 모서리 둥글게 */
+  border-color: white !important; /* 테두리 색상 */
+  padding: 5px 15px;
+  cursor: pointer;
+}
+.AuthImage {
+  /* 인라인 스타일에서 가져온 속성들 */
+  background-color: "pink" !important; /* 배경색 */
+  color: white !important; /* 글자색 */
+  border-radius: 300px !important; /* 모서리 둥글게 */
+  border-color: white !important; /* 테두리 색상 */
+
+  cursor: pointer;
+  border-width: 10px !important; /* 굵기: 2픽셀로 설정 (원하는 굵기로 조절 가능) */
+  border-style: solid !important; /* 스타일: 실선으로 설정 */
+  border-color: white !important; /* 테두리 색상: 흰색 유지 */
+}
