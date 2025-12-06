@@ -70,7 +70,7 @@ export default function Header() {
             >
               붓기맵
             </Button>
-
+            {/* {alert(user?.usRole)} */}
             {/* ✅ 관리자 전용 메뉴 (드롭다운) */}
             {user?.usRole === "ADMIN" && (
               <div

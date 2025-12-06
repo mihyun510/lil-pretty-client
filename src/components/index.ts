@@ -8,14 +8,5 @@ export {
   SwellingMapMainForm,
   KakaoMapForm,
 } from "./swellingMap";
-<<<<<<< HEAD
 export { DateMainForm, DateDetailForm, DateDetailCourseForm } from "./date";
 export { MealMainForm, MealDetailForm, MealRecForm } from "./admin";
-=======
-export {
-  DateMainForm,
-  DateDetailForm,
-  DateDetailCourseForm,
-  DateManagerForm,
-} from "./date";
->>>>>>> master
