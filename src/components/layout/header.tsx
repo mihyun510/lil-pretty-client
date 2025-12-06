@@ -107,7 +107,7 @@ export default function Header() {
                 >
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/users/auth");
+                      navigate("/admin/user/main");
                       handleMouseLeave();
                     }}
                   >
@@ -115,7 +115,7 @@ export default function Header() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/commcode");
+                      navigate("/admin/commoncode/main");
                       handleMouseLeave();
                     }}
                   >
@@ -139,7 +139,7 @@ export default function Header() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/date/course");
+                      navigate("/admin/date/main");
                       handleMouseLeave();
                     }}
                   >
@@ -147,7 +147,7 @@ export default function Header() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      navigate("/admin/swellingmap/mapset");
+                      navigate("/admin/swellingmap/main");
                       handleMouseLeave();
                     }}
                   >

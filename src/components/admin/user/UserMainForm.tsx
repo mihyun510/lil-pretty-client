@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EditIcon from "@mui/icons-material/Edit";
-import styles from "./User.modules.css";
+//import styles from "./User.modules.css";
 export default function UserMainForm() {
   const rows = [
     { id: 1, name: "김민정", start: "minjeong27", end: "관리자" },

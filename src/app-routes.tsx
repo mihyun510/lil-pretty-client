@@ -12,6 +12,9 @@ import {
   MealMainPage,
   MealDetailPage,
   MealRecPage,
+  DateManagerPage,
+  UserMainPage,
+  CommonCodeMainPage,
 } from "@/pages";
 
 export const appRoutes = [
@@ -28,6 +31,11 @@ export const appRoutes = [
   { path: "/admin/meal/main", element: <MealMainPage /> },
   { path: "/admin/meal/detail", element: <MealDetailPage /> },
   { path: "/admin/meal/rec", element: <MealRecPage /> },
+
+  { path: "/admin/user/main", element: <UserMainPage /> },
+  { path: "/admin/date/main", element: <DateManagerPage /> },
+  { path: "/admin/commoncode/main", element: <CommonCodeMainPage /> },
+
   { path: "/", element: <LandingPage /> },
 ];
 

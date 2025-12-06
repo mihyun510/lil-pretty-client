@@ -29,7 +29,7 @@ import { useNavigate } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EditIcon from "@mui/icons-material/Edit";
 
-import styles from "./Common.module.css";
+import styles from "./CommonCode.module.css";
 export default function CommonMainForm() {
   const newCommCodeItem = {
     // 실제 DB 컬럼에 맞게 빈 값 설정

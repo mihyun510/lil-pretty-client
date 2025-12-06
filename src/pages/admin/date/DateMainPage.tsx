@@ -1,8 +1,8 @@
-import { DateMainForm } from "@/components/admin/date";
+import { DateManagerForm } from "@/components/admin/date";
 export default function DateMainPage() {
   return (
     <div>
-      <DateMainForm></DateMainForm>
+      <DateManagerForm></DateManagerForm>
     </div>
   );
 }

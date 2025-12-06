@@ -1,1 +1,1 @@
-export { default as DateMainForm } from "./DateMainForm";
+export { default as DateManagerForm } from "./DateMainForm";

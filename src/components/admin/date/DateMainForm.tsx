@@ -4,7 +4,7 @@ import {
   getDetailDateCourse,
   deleteDateCourse,
   deleteDetailDateCourse,
-} from "@/api/dateManagerApi";
+} from "@/api/admin/dateMainApi";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
 import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
 import { useNavigate } from "react-router-dom";
