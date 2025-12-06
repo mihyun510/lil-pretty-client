@@ -1,4 +1,4 @@
-import { UserMainForm } from "@/components/admin/user";
+import { UserMainForm } from "@/components/";
 export default function UserMainPage() {
   return (
     <div>

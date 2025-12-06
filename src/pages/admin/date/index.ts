@@ -1,1 +1,1 @@
-export { default as DateMainPage } from "./DateMainPage";
+export { default as DateManagerPage } from "./DateMainPage";
