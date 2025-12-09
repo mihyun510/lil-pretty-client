@@ -1,15 +1,17 @@
-import { apiInstance } from "./common/axiosInstance";
-import { CommonResponse } from "./interfaces/Common";
-import { CommonCodeItems } from "./interfaces/CommonCode";
+import { apiInstance } from "../common/axiosInstance";
+import { CommonResponse } from "../interfaces/Common";
+import { MealAdminItems } from "../interfaces/MealMst";
 
-export async function getCommonCodeItems(
-  cmGrpCd: string
-): Promise<CommonResponse<CommonCodeItems[]>> {
+export async function getAdminMealItems(
+  mmSubject: string,
+  mmCategory: string
+): Promise<CommonResponse<MealAdminItems[]>> {
   try {
     const response = await apiInstance.post(
-      "/cmm/commoncode/getCommonCodeItems",
+      "/admin/meal/main/getAdminMealItems",
       {
-        cmGrpCd,
+        mmSubject,
+        mmCategory,
       }
     );
     if (response.data.ok && response.data.data) {
@@ -25,7 +27,7 @@ export async function getCommonCodeItems(
       };
     }
   } catch (error) {
-    console.error("getCommonCodeItems Error:", error);
+    console.error("getAdminMealItems Error:", error);
     return {
       ok: false,
       message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",

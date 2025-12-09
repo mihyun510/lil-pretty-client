@@ -20,56 +20,54 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import { getCommonCodeItems } from "@/api/commonCodeApi";
 import { CommonCodeItems } from "@/api/interfaces/CommonCode";
+import { getAdminMealItems } from "@/api/admin/mealMainApi";
+import { MealAdminItems } from "@/api/interfaces/MealMst";
 
 export default function MealMainForm() {
-  const [priceFilter, setPriceFilter] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState("ALL");
+  const [categoryFilter, setCategoryFilter] = useState("ALL");
   const [categoryList, setCategoryList] = useState<CommonCodeItems[]>([]);
   const [priceList, setPriceList] = useState<CommonCodeItems[]>([]);
-
+  const [mealItems, setMealItems] = useState<MealAdminItems[]>([]);
   useEffect(() => {
     async function fetchCategories() {
       const result1 = await getCommonCodeItems("ML002");
+      const result2 = await getCommonCodeItems("ML001");
+
+      let defaultCategory = "ALL";
+      let defaultPrice = "ALL";
 
       if (result1.ok && result1.data) {
         setCategoryList(result1.data);
-        setCategoryFilter(result1.data[0]?.cm_dt_cd || ""); // 기본값 설정
+        defaultCategory = result1.data[0]?.cm_dt_cd || "ALL";
       }
-
-      const result2 = await getCommonCodeItems("ML001");
-
       if (result2.ok && result2.data) {
         setPriceList(result2.data);
-        setPriceFilter(result2.data[0]?.cm_dt_cd || "");
+        defaultPrice = result2.data[0]?.cm_dt_cd || "ALL";
       }
+
+      // 🚀 여기서 한번만 필터 설정
+      setCategoryFilter(defaultCategory);
+      setPriceFilter(defaultPrice);
+
+      // 🚀 필터 설정 후에 바로 1번만 호출
+      fetchMealItems(defaultPrice, defaultCategory);
     }
 
     fetchCategories();
   }, []);
 
-  const rows = [
-    {
-      id: 1,
-      name: "식단명1",
-      price: 1500,
-      category: "양배추",
-      date: "2025.11.09",
-    },
-    {
-      id: 2,
-      name: "식단명2",
-      price: 2000,
-      category: "양배추",
-      date: "2025.11.09",
-    },
-    {
-      id: 3,
-      name: "식단명3",
-      price: 2500,
-      category: "두부",
-      date: "2025.11.05",
-    },
-  ];
+  // fetchMealItems는 파라미터 받을 수 있게 변경
+  async function fetchMealItems(
+    price = priceFilter,
+    category = categoryFilter
+  ) {
+    const result3 = await getAdminMealItems(price, category);
+
+    if (result3.ok && result3.data) {
+      setMealItems(result3.data);
+    }
+  }
 
   return (
     <Box sx={{ p: 4, backgroundColor: "#fde7ef", minHeight: "100vh" }}>
@@ -130,7 +128,11 @@ export default function MealMainForm() {
           <Button variant="contained" sx={{ backgroundColor: "#f48fb1" }}>
             삭제
           </Button>
-          <Button variant="contained" sx={{ backgroundColor: "#f48fb1" }}>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: "#f48fb1" }}
+            onClick={fetchMealItems}
+          >
             조회
           </Button>
         </Box>
@@ -147,23 +149,27 @@ export default function MealMainForm() {
                   <TableCell>선택</TableCell>
                   <TableCell>식단명</TableCell>
                   <TableCell>금액</TableCell>
+                  <TableCell>칼로리</TableCell>
                   <TableCell>카테고리</TableCell>
                   <TableCell>등록일자</TableCell>
+                  <TableCell>등록자</TableCell>
                   <TableCell>수정</TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
+                {mealItems.map((item, index) => (
+                  <TableRow key={item.mm_cd}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>
                       <Checkbox color="secondary" />
                     </TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.price.toLocaleString()}원</TableCell>
-                    <TableCell>{row.category}</TableCell>
-                    <TableCell>{row.date}</TableCell>
+                    <TableCell>{item.mm_title}</TableCell>
+                    <TableCell>{item.mm_pri.toLocaleString()}원</TableCell>
+                    <TableCell>{item.mm_kcal}</TableCell>
+                    <TableCell>{item.mm_subject}</TableCell>
+                    <TableCell>{item.in_date}</TableCell>
+                    <TableCell>{item.in_user}</TableCell>
                     <TableCell>
                       <EditIcon sx={{ color: "#e75480", cursor: "pointer" }} />
                     </TableCell>

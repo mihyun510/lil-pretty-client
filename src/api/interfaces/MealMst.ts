@@ -10,3 +10,12 @@ export interface MealItems {
   mm_img?: string; // 식단 이미지 명 (nullable 이라 optional 처리)
   favorite: string; //즐겨찾기
 }
+export interface MealAdminItems {
+  mm_cd: string;
+  mm_title: string;
+  mm_subject: string;
+  mm_kcal: number;
+  mm_pri: number;
+  in_date: string;
+  in_user: string;
+}
