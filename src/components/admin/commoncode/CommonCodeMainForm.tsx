@@ -45,7 +45,7 @@ export default function CommonMainForm() {
   const [CommCode, setCommCode] = useState<CommonCodeItems[]>([]);
   const [selectedGrpCd, setSelectedGrpCd] = useState<string | null>(null);
   //조회
-  const fetchCommCodeItems2 = async () => {
+  const searchCommCodeItems = async () => {
     const result = await getCommCodeItems(grpCd, grpNm);
     if (result.ok && result.data) {
       setCommCode(result.data);
@@ -122,7 +122,7 @@ export default function CommonMainForm() {
             ></input>
           </Box>
           <Box ml={115} display="flex" gap={1}>
-            <Button className={styles.CommButton} onClick={fetchCommCodeItems2}>
+            <Button className={styles.CommButton} onClick={searchCommCodeItems}>
               조회
             </Button>
             <Button className={styles.CommButton}>저장</Button>

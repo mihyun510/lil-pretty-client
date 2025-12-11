@@ -102,9 +102,7 @@ export default function DietMainForm() {
                   },
                 }}
                 onClick={() =>
-                  downloadFile(
-                    "mealRec/테이블_정의서_20251007122110.xlsx"
-                  )
+                  downloadFile("mealRec/(별표3)_채용시험_이의신청서.hwp")
                 } // <- 여기 경로 지정
               >
                 오늘의 식단 GET IT
@@ -154,7 +152,6 @@ export default function DietMainForm() {
               </Grid>
             ))}
           </Grid>
-          
         </Box>
         {/* 오른쪽: 전신사진 + 텍스트 */}
         <Box
