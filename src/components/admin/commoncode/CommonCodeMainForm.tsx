@@ -109,7 +109,7 @@ export default function CommonMainForm() {
             borderRadius: "10px",
           }}
         >
-          <Box display={"flex"} mr={60} alignItems={"center"}>
+          <Box display={"flex"} mr={90} alignItems={"center"}>
             <Box mr={2} sx={{ fontWeight: "bold" }}>
               그룹코드 명
             </Box>
@@ -137,12 +137,9 @@ export default function CommonMainForm() {
               display={"flex"}
               gap={1}
               alignItems={"center"}
-              justifyContent={"space-between"}
+              justifyContent={"end"}
               mb={1}
             >
-              <Typography style={{ fontWeight: "bold", color: "grey" }}>
-                그룹코드
-              </Typography>
               <Box display={"flex"} gap={1}>
                 <Button className={styles.CommButton} onClick={addCommCodeItem}>
                   행추가
@@ -151,7 +148,7 @@ export default function CommonMainForm() {
               </Box>
             </Box>
             {/* Table */}
-            <Card sx={{ width: 860 }}>
+            <Card sx={{ width: 2050 }}>
               <CardContent>
                 <TableContainer>
                   <Table>
@@ -160,6 +157,8 @@ export default function CommonMainForm() {
                         <TableCell>순번</TableCell>
                         <TableCell>공통코드</TableCell>
                         <TableCell>공통코드명</TableCell>
+                        <TableCell>상세코드</TableCell>
+                        <TableCell>상세코드명</TableCell>
                         <TableCell>설명</TableCell>
                       </TableRow>
                     </TableHead>
@@ -171,17 +170,9 @@ export default function CommonMainForm() {
                           <TableCell>
                             <Box>
                               <TextField
-                                onClick={() => setSelectedGrpCd(row.cm_grp_cd)}
+                                onClick={() => setSelectedGrpCd(row.cm_grp_cd)} //
                                 size="small"
                                 value={row.cm_grp_cd}
-                                sx={{
-                                  cursor: "pointer",
-                                  // 선택된 행을 시각적으로 구분
-                                  backgroundColor:
-                                    selectedGrpCd === row.cm_grp_cd
-                                      ? "#f0f0f0"
-                                      : "inherit",
-                                }}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
@@ -196,14 +187,6 @@ export default function CommonMainForm() {
                           <TableCell>
                             <Box>
                               <TextField
-                                sx={{
-                                  cursor: "pointer",
-                                  // 선택된 행을 시각적으로 구분
-                                  backgroundColor:
-                                    selectedGrpCd === row.cm_grp_cd
-                                      ? "#f0f0f0"
-                                      : "inherit",
-                                }}
                                 size="small"
                                 value={row.cm_grp_nm}
                                 onChange={(event) => {
@@ -217,23 +200,31 @@ export default function CommonMainForm() {
                             </Box>
                           </TableCell>
 
+                          <TableCell>{row.cm_dt_cd}</TableCell>
                           <TableCell>
                             <Box>
                               <TextField
-                                sx={{
-                                  cursor: "pointer",
-                                  // 선택된 행을 시각적으로 구분
-                                  backgroundColor:
-                                    selectedGrpCd === row.cm_grp_cd
-                                      ? "#f0f0f0"
-                                      : "inherit",
-                                }}
                                 size="small"
-                                value={row.cm_grp_desc}
+                                value={row.cm_dt_nm}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
-                                    "cm_grp_desc",
+                                    "cm_dt_nm",
+                                    event.target.value
+                                  );
+                                }}
+                              />
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box>
+                              <TextField
+                                size="small"
+                                value={row.cm_dt_desc}
+                                onChange={(event) => {
+                                  handleChange(
+                                    index,
+                                    "cm_dt_desc",
                                     event.target.value
                                   );
                                 }}
@@ -256,71 +247,7 @@ export default function CommonMainForm() {
             alignItems={"center"}
             justifyContent={"space-between"}
             mb={1}
-          >
-            <Box>
-              <Typography style={{ fontWeight: "bold", color: "grey" }}>
-                상세코드
-              </Typography>
-            </Box>
-            <Box display={"flex"} gap={1}>
-              <Box sx={{ background: "#f29bb8", borderRadius: 15 }}>
-                <ArrowDropUpOutlinedIcon
-                  sx={{ fontSize: 30, color: "white" }}
-                ></ArrowDropUpOutlinedIcon>
-              </Box>
-              <Box sx={{ background: "#f29bb8", borderRadius: 15 }}>
-                <ArrowDropDownOutlinedIcon
-                  sx={{ fontSize: 30, color: "white" }}
-                ></ArrowDropDownOutlinedIcon>
-              </Box>
-
-              <Button className={styles.CommButton}>행추가</Button>
-              <Button className={styles.CommButton}>행삭제</Button>
-            </Box>
-          </Box>{" "}
-          {/* Table */}
-          <Card sx={{ width: 900 }}>
-            <CardContent>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>순번</TableCell>
-                      <TableCell>상세코드</TableCell>
-                      <TableCell>상세코드명</TableCell>
-                      <TableCell>설명</TableCell>
-                      <TableCell>사용여부</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredDetailCodes.map((row, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>
-                          <Box>
-                            <TextField size="small" value={row.cm_dt_cd} />
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          <Box>
-                            <TextField size="small" value={row.cm_dt_nm} />
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          <Box>
-                            <TextField size="small" value={row.cm_dt_desc} />
-                          </Box>
-                        </TableCell>{" "}
-                        <TableCell>
-                          <Checkbox></Checkbox>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          ></Box>{" "}
         </Box>
       </Box>
     </Box>
