@@ -9,7 +9,8 @@ export interface UserRequest {
 }
 
 export interface UserResponse {
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
   user?: UserRequest;
   message?: string;
 }
