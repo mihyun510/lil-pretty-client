@@ -6,10 +6,13 @@ export async function getCommCodeItems(
   grpNm: string
 ): Promise<CommonResponse<CommonCodeItems[]>> {
   try {
-    const response = await apiInstance.post("/comm/manager/getCommCodeItems", {
-      grpCd,
-      grpNm,
-    });
+    const response = await apiInstance.post(
+      "/admin/commcode/main/getCommCodeItems",
+      {
+        grpCd,
+        grpNm,
+      }
+    );
     if (response.data.ok && response.data.data) {
       return {
         data: response.data.data,
