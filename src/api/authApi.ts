@@ -12,22 +12,25 @@ export async function login(usId: string, usPw: string): Promise<UserResponse> {
     });
 
     const { setLoggedIn, setUser } = useAuthStore.getState();
+    const { accessToken, refreshToken, user, message } = response.data;
 
-    if (response.data.token && response.data.user) {
+    if (accessToken && refreshToken && user) {
       // 로그인 성공 시, 사용자 정보와 토큰을 반환
-      localStorage.setItem("accessToken", response.data.token);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       setLoggedIn(true);
-      setUser(response.data.user);
+      setUser(user);
 
       return {
-        token: response.data.token,
-        user: response.data.user,
-        message: response.data.message,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        user: user,
+        message: message,
       };
     } else {
       // 인증 실패 시
       return {
-        message: response.data.message || "인증 정보가 유효하지 않습니다.",
+        message: message || "인증 정보가 유효하지 않습니다.",
       };
     }
   } catch (error) {

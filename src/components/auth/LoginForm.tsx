@@ -24,7 +24,7 @@ export default function LoginForm({
       e.preventDefault(); // 기본 동작(페이지 새로고침) 방지
 
       const response = await login(usId, usPw);
-      if (response.token) {
+      if (response.accessToken) {
         console.log(response);
         onSuccess(); // 성공 시 모달 닫기
       } else alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");

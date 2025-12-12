@@ -14,6 +14,7 @@ export interface MealAdminItems {
   mm_cd: string;
   mm_title: string;
   mm_subject: string;
+  mm_subject_nm: string;
   mm_kcal: number;
   mm_pri: number;
   in_date: string;
