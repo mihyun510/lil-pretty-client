@@ -15,7 +15,8 @@
   cursor: pointer;
 }
 .AuthImage {
-  /* 인라인 스타일에서 가져온 속성들 */
+  max-width: "300px";
+  max-height: "300px";
   background-color: "pink" !important; /* 배경색 */
   color: white !important; /* 글자색 */
   border-radius: 300px !important; /* 모서리 둥글게 */
