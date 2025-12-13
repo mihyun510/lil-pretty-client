@@ -120,7 +120,8 @@ export default function UserMainForm() {
     const result = await updateAdminUserItems(selectedUser);
 
     if (result.ok) {
-      //await fetchAdminUserList(); // 전체 목록 새로고침
+      await getAdminUserItems(usId); // 전체 목록 새로고침
+      alert("사용자 수정이 완료되었습니다.");
     }
   };
   return (
