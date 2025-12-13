@@ -94,7 +94,8 @@ apiInstance.interceptors.response.use(
 
         // 🔥 Refresh API 호출
         const res = await authInstance.post("/refresh", {
-          refreshToken,
+          //refreshToken
+          withCredentials: true,
         });
 
         const newAccessToken = res.data.accessToken;
@@ -113,13 +114,18 @@ apiInstance.interceptors.response.use(
 
         // 모든 토큰 제거 후 로그인 페이지로 이동
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        //localStorage.removeItem("refreshToken");
         window.location.href = "/";
 
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
+    }
+
+    // ❌ 권한 문제
+    if (error.response?.status === 403) {
+      alert("접근 권한이 없습니다.");
     }
 
     // if (error.response) {

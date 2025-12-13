@@ -14,10 +14,10 @@ export async function login(usId: string, usPw: string): Promise<UserResponse> {
     const { setLoggedIn, setUser } = useAuthStore.getState();
     const { accessToken, refreshToken, user, message } = response.data;
 
-    if (accessToken && refreshToken && user) {
+    if (accessToken && user) {
       // 로그인 성공 시, 사용자 정보와 토큰을 반환
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      //localStorage.setItem("refreshToken", refreshToken);
       setLoggedIn(true);
       setUser(user);
 
