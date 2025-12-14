@@ -3,7 +3,6 @@ export interface MealDtlItems {
   mm_cd: string;
   mm_title: string;
   mm_subject_nm: string;
-  mm_category_nm: string;
   mm_desc?: string;
   mm_kcal: number;
   mm_pri: number;

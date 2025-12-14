@@ -21,18 +21,23 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import { getCommonCodeItems } from "@/api/commonCodeApi";
 import { CommonCodeItems } from "@/api/interfaces/CommonCode";
-import { getAdminMealItems } from "@/api/admin/mealMainApi";
+import {
+  deleteAdminMealItems,
+  getAdminMealItems,
+} from "@/api/admin/mealMainApi";
 import { MealAdminItems } from "@/api/interfaces/MealMst";
 import { useNavigate } from "react-router-dom";
+import { gfnGetCudResultMessage } from "@/lib/crudMessage";
 
 export default function MealMainForm() {
   const navigate = useNavigate();
 
-  const [priceFilter, setPriceFilter] = useState("ALL");
+  const [subjectFilter, setSubjectFilter] = useState("ALL");
   const [categoryFilter, setCategoryFilter] = useState("ALL");
   const [categoryList, setCategoryList] = useState<CommonCodeItems[]>([]);
-  const [priceList, setPriceList] = useState<CommonCodeItems[]>([]);
+  const [subjectList, setSubjectList] = useState<CommonCodeItems[]>([]);
   const [mealItems, setMealItems] = useState<MealAdminItems[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [page, setPage] = useState(1);
   const itemsPerPage = 10; // 한 페이지에 표시할 카드 수
@@ -46,15 +51,39 @@ export default function MealMainForm() {
     setPage(value);
   };
 
+  const handleCheckboxChange = (mmCd: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(mmCd) ? prev.filter((id) => id !== mmCd) : [...prev, mmCd]
+    );
+  };
+
+  async function handleDelete() {
+    if (selectedIds.length === 0) {
+      alert("삭제할 식단을 선택해주세요.");
+      return;
+    }
+
+    if (!confirm("선택한 식단을 삭제하시겠습니까?")) return;
+
+    const result = await deleteAdminMealItems(selectedIds);
+
+    alert(gfnGetCudResultMessage(result));
+
+    setSelectedIds([]);
+
+    // ✅ 현재 페이지 유지한 채 목록 재조회
+    fetchMealItems();
+  }
+
   // fetchMealItems는 파라미터 받을 수 있게 변경
   async function fetchMealItems(
-    price = priceFilter,
+    subject = subjectFilter,
     category = categoryFilter
   ) {
-    const result3 = await getAdminMealItems(price, category);
+    const result = await getAdminMealItems(subject, category);
 
-    if (result3.ok && result3.data) {
-      setMealItems(result3.data);
+    if (result.ok && result.data) {
+      setMealItems(result.data);
     }
   }
 
@@ -64,23 +93,23 @@ export default function MealMainForm() {
       const result2 = await getCommonCodeItems("ML001");
 
       let defaultCategory = "ALL";
-      let defaultPrice = "ALL";
+      let defaultSubject = "ALL";
 
       if (result1.ok && result1.data) {
         setCategoryList(result1.data);
         defaultCategory = result1.data[0]?.cm_dt_cd || "ALL";
       }
       if (result2.ok && result2.data) {
-        setPriceList(result2.data);
-        defaultPrice = result2.data[0]?.cm_dt_cd || "ALL";
+        setSubjectList(result2.data);
+        defaultSubject = result2.data[0]?.cm_dt_cd || "ALL";
       }
 
       // 🚀 여기서 한번만 필터 설정
       setCategoryFilter(defaultCategory);
-      setPriceFilter(defaultPrice);
+      setSubjectFilter(defaultSubject);
 
       // 🚀 필터 설정 후에 바로 1번만 호출
-      fetchMealItems(defaultPrice, defaultCategory);
+      fetchMealItems(defaultSubject, defaultCategory);
     }
 
     fetchCategories();
@@ -107,16 +136,16 @@ export default function MealMainForm() {
         {/* Filter Section */}
         <Box sx={{ display: "flex", gap: 3 }}>
           <FormControl size="small" sx={{ width: 180 }}>
-            <InputLabel>가격</InputLabel>
+            <InputLabel>주제</InputLabel>
             <Select
-              value={priceFilter}
-              label="가격"
+              value={subjectFilter}
+              label="주제"
               onChange={(e) => {
-                setPriceFilter(e.target.value);
+                setSubjectFilter(e.target.value);
                 fetchMealItems(e.target.value, categoryFilter);
               }}
             >
-              {priceList.map((item) => (
+              {subjectList.map((item) => (
                 <MenuItem key={item.cm_dt_cd} value={item.cm_dt_cd}>
                   {item.cm_dt_nm}
                 </MenuItem>
@@ -125,13 +154,13 @@ export default function MealMainForm() {
           </FormControl>
 
           <FormControl size="small" sx={{ width: 180 }}>
-            <InputLabel>카테고리</InputLabel>
+            <InputLabel>가격</InputLabel>
             <Select
               value={categoryFilter}
-              label="카테고리"
+              label="가격"
               onChange={(e) => {
                 setCategoryFilter(e.target.value);
-                fetchMealItems(priceFilter, e.target.value);
+                fetchMealItems(subjectFilter, e.target.value);
               }}
             >
               {categoryList.map((item) => (
@@ -152,14 +181,18 @@ export default function MealMainForm() {
           >
             추가
           </Button>
-          <Button variant="contained" sx={{ backgroundColor: "#f48fb1" }}>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: "#f48fb1" }}
+            onClick={handleDelete}
+          >
             삭제
           </Button>
           <Button
             variant="contained"
             sx={{ backgroundColor: "#f48fb1" }}
             onClick={() => {
-              fetchMealItems(priceFilter, categoryFilter);
+              fetchMealItems(subjectFilter, categoryFilter);
             }}
           >
             조회
@@ -168,38 +201,49 @@ export default function MealMainForm() {
       </Box>
 
       {/* Table */}
-      <Card sx={{ border: "1px solid #f8b6c6", boxShadow: 1 }}>
+      <Card
+        sx={{
+          border: "1px solid #f8b6c6",
+          boxShadow: 1,
+        }}
+      >
         <CardContent>
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>순번</TableCell>
-                  <TableCell>선택</TableCell>
-                  <TableCell>식단명</TableCell>
-                  <TableCell>금액</TableCell>
-                  <TableCell>칼로리</TableCell>
-                  <TableCell>카테고리</TableCell>
-                  <TableCell>등록일자</TableCell>
-                  <TableCell>등록자</TableCell>
-                  <TableCell>수정</TableCell>
+                  <TableCell align="center">순번</TableCell>
+                  <TableCell align="center">선택</TableCell>
+                  <TableCell align="center">식단명</TableCell>
+                  <TableCell align="center">가격</TableCell>
+                  <TableCell align="center">칼로리</TableCell>
+                  <TableCell align="center">카테고리</TableCell>
+                  <TableCell align="center">등록일자</TableCell>
+                  <TableCell align="center">등록자</TableCell>
+                  <TableCell align="center">수정</TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
                 {paginatedMeals.map((item, index) => (
                   <TableRow key={item.mm_cd}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <Checkbox color="secondary" />
+                    <TableCell align="center">{index + 1}</TableCell>
+                    <TableCell align="center">
+                      <Checkbox
+                        color="secondary"
+                        checked={selectedIds.includes(item.mm_cd)}
+                        onChange={() => handleCheckboxChange(item.mm_cd)}
+                      />
                     </TableCell>
-                    <TableCell>{item.mm_title}</TableCell>
-                    <TableCell>{item.mm_pri.toLocaleString()}원</TableCell>
-                    <TableCell>{item.mm_kcal} kcal</TableCell>
-                    <TableCell>{item.mm_subject_nm}</TableCell>
-                    <TableCell>{item.in_date}</TableCell>
-                    <TableCell>{item.in_user}</TableCell>
-                    <TableCell>
+                    <TableCell align="center">{item.mm_title}</TableCell>
+                    <TableCell align="center">
+                      {item.mm_pri.toLocaleString()}원
+                    </TableCell>
+                    <TableCell align="center">{item.mm_kcal} kcal</TableCell>
+                    <TableCell align="center">{item.mm_subject_nm}</TableCell>
+                    <TableCell align="center">{item.in_date}</TableCell>
+                    <TableCell align="center">{item.in_user}</TableCell>
+                    <TableCell align="center">
                       <EditIcon
                         sx={{
                           color: "#f06292",
