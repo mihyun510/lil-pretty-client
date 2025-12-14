@@ -109,9 +109,9 @@ export default function DietMasterForm() {
             marginBottom: "16px",
           }}
         >
-          <Tab label="3,000원 이하" sx={{ color: "white" }} />
-          <Tab label="5,000원 이하" sx={{ color: "white" }} />
-          <Tab label="10,000원 이하" sx={{ color: "white" }} />
+          <Tab label="0원 ~ 5000원" sx={{ color: "white" }} />
+          <Tab label="5000원 ~ 10000원" sx={{ color: "white" }} />
+          <Tab label="10,000원 초과" sx={{ color: "white" }} />
         </Tabs>
 
         {loading ? (

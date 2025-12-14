@@ -212,7 +212,7 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
         container
         spacing={2}
         mt={1}
-        sx={{ gap: 8, display: "flex", mx: 20 }}
+        sx={{ gap: 8, display: "flex", mx: 10 }}
       >
         <IconButton onClick={handlePrevPage}>
           <ChevronLeftIcon sx={{ fontSize: 100, color: "#f74782ff" }}>
