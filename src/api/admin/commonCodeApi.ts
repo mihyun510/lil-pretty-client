@@ -1,6 +1,10 @@
 import { apiInstance } from "../common/axiosInstance";
-import { CommonCodeItems } from "../interfaces/CommonCode";
-import { CommonResponse } from "@/api/interfaces/Common";
+import { CommonCodeItems, CommonCodeId } from "../interfaces/CommonCode";
+import {
+  CommonResponse,
+  CUDCommonResponse,
+  CUDFailItem,
+} from "../interfaces/Common";
 export async function getCommCodeItems(
   grpCd: string,
   grpNm: string
@@ -30,6 +34,33 @@ export async function getCommCodeItems(
     return {
       ok: false,
       message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
+    };
+  }
+}
+/* ----------------공통코드 삭제 ----------------- */
+export async function deleteAdminCommCodeItems(
+  grpCdList: CommonCodeId[]
+): Promise<CUDCommonResponse<CUDFailItem>> {
+  try {
+    const response = await apiInstance.post(
+      "/admin/meal/commcode/deleteAdminCommCodeItems",
+      {
+        grpCdList,
+      }
+    );
+
+    return {
+      successCount: response.data.successCount,
+      failCount: response.data.failCount,
+      data: response.data.data,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.error("deleteAdminCommCodeItems Error:", error);
+    return {
+      successCount: 0,
+      failCount: grpCdList.length,
+      message: "서버 오류 또는 네트워크 문제로 삭제하지 못했습니다.",
     };
   }
 }
