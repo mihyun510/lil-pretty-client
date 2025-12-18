@@ -5,6 +5,7 @@ export interface CommonCodeItems {
   cm_dt_nm: string;
   cm_grp_desc: string;
   cm_dt_desc: string;
+  isNew?: boolean;
 }
 export interface CommonCodeId {
   cm_grp_cd: string;

@@ -30,6 +30,7 @@ import { CommonCodeItems, CommonCodeId } from "@/api/interfaces/CommonCode";
 import {
   getCommCodeItems,
   deleteAdminCommCodeItems,
+  insertAdminCommCodeItems,
 } from "@/api/admin/commonCodeApi";
 import { useNavigate } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -37,15 +38,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import { gfnGetCudResultMessage } from "@/lib/crudMessage";
 import styles from "./CommonCode.module.css";
 export default function CommonMainForm() {
-  const newCommCodeItem = {
-    // 실제 DB 컬럼에 맞게 빈 값 설정
-    cm_grp_cd: "",
-    cm_dt_cd: "",
-    cm_grp_nm: "",
-    cm_grp_desc: "",
-    cm_dt_nm: "",
-    cm_dt_desc: "",
-  };
   const [grpCd, setgrpCd] = useState("");
   const [dtCd, setdtCd] = useState("");
   const [grpNm, setgrpNm] = useState("");
@@ -65,9 +57,21 @@ export default function CommonMainForm() {
 
   /* ---------------- 추가 ----------------- */
   const addCommCodeItem = () => {
-    setCommCode([...CommCode, newCommCodeItem]);
+    const newRow: CommonCodeItems = {
+      // 실제 DB 컬럼에 맞게 빈 값 설정
+      cm_grp_cd: "",
+      cm_dt_cd: "",
+      cm_grp_nm: "",
+      cm_grp_desc: "",
+      cm_dt_nm: "",
+      cm_dt_desc: "",
+    };
+    setCommCode([...CommCode, newRow]);
   };
 
+  const saveItem = async () => {
+    const result = await insertAdminCommCodeItems(CommCode);
+  };
   /* ---------------- 삭제 ----------------- */
   const [selectedgrpCdList, setselectedgrpCdList] = useState<CommonCodeId[]>(
     []
@@ -152,7 +156,7 @@ export default function CommonMainForm() {
     <Box sx={{ p: 4, backgroundColor: "#fdecef", minHeight: "100vh" }}>
       <Box>
         <Typography variant="h5" fontWeight="bold" color="gray">
-          사용자권한관리
+          공통코드 관리
         </Typography>
 
         <Box

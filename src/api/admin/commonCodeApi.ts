@@ -43,7 +43,7 @@ export async function deleteAdminCommCodeItems(
 ): Promise<CUDCommonResponse<CUDFailItem>> {
   try {
     const response = await apiInstance.post(
-      "/admin/meal/commcode/deleteAdminCommCodeItems",
+      "/admin/commcode/main/deleteAdminCommCodeItems",
       {
         grpCdList,
       }
@@ -60,6 +60,33 @@ export async function deleteAdminCommCodeItems(
     return {
       successCount: 0,
       failCount: grpCdList.length,
+      message: "서버 오류 또는 네트워크 문제로 삭제하지 못했습니다.",
+    };
+  }
+}
+/* ----------------공통코드 추가 ----------------- */
+export async function insertAdminCommCodeItems(
+  newCommCodeItem: CommonCodeId[]
+): Promise<CUDCommonResponse<CUDFailItem>> {
+  try {
+    const response = await apiInstance.post(
+      "/admin/commcode/main/insertAdminCommCodeItems",
+      {
+        newCommCodeItem,
+      }
+    );
+
+    return {
+      successCount: response.data.successCount,
+      failCount: response.data.failCount,
+      data: response.data.data,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.error("insertAdminCommCodeItems Error:", error);
+    return {
+      successCount: 0,
+      failCount: 0,
       message: "서버 오류 또는 네트워크 문제로 삭제하지 못했습니다.",
     };
   }
