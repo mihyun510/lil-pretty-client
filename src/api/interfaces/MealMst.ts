@@ -23,3 +23,25 @@ export interface MealAdminItems {
 export interface mmCdList {
   mm_cd: string;
 }
+
+export interface MealInsertItems {
+  mm_cd: string;
+  mm_title: string;
+  mm_subject: string;
+  mm_desc: string;
+  mm_kcal: number;
+  mm_pri: number;
+  mm_img: string;
+}
+
+export interface MealAdminMstItem {
+  mmCd: string;
+  mmTitle: string;
+  mmDesc: string;
+  mmSubject: string;
+  mmKcal: number;
+  mmPri: number;
+  mmImg: string;
+  inDate: string;
+  inUser: string;
+}

@@ -87,19 +87,23 @@ export default function DietDetailForm({ mmCd }: DietDetailFormProps) {
   return (
     <Box p={4} bgcolor="#ffe4ec" minHeight="100vh">
       {/* 상단: 판 다이어트존 */}
-
       <Typography
         variant="h6"
         fontWeight="bold"
-        mb={2}
-        mx={20}
-        sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+        fontSize={15}
+        mb={3}
+        sx={{
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          color: "#f74782ff",
+        }}
         onClick={() => navigate("/diet/list")}
       >
         <IconButton>
           <ArrowBackIcon sx={{ fontSize: 30, color: "#f74782ff" }} />
         </IconButton>
-        뒤로가기
+        가성비 식단 목록
       </Typography>
 
       <Grid container spacing={2} gap={"60px"} mx={20}>

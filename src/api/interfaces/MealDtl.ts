@@ -11,3 +11,10 @@ export interface MealDtlItems {
   md_content: string;
   md_seq: string;
 }
+
+export interface MealAdminDtlItem {
+  mm_cd: string;
+  mm_dd: string;
+  md_content: string;
+  md_seq?: number;
+}

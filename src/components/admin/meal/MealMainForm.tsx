@@ -121,7 +121,7 @@ export default function MealMainForm() {
         variant="h5"
         sx={{ fontWeight: "bold", mb: 4, color: "#555" }}
       >
-        식단관리
+        식단 관리
       </Typography>
 
       {/* Filter + Buttons 한 줄 정렬 */}
