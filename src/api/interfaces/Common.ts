@@ -14,3 +14,7 @@ export interface CUDFailItem {
   item: string;
   reason: string;
 }
+
+export interface CUDRequestItems<T = unknown> {
+  item: T[];
+}

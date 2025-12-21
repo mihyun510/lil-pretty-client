@@ -5,8 +5,8 @@ export function gfnGetCudResultMessage(
 ): string {
   if (result.failCount > 0 && result.data && result.data.length > 0) {
     return (
-      `삭제 성공: ${result.successCount}건\n` +
-      `삭제 실패: ${result.failCount}건\n\n` +
+      `성공: ${result.successCount}건\n` +
+      `실패: ${result.failCount}건\n\n` +
       result.data.map((v) => `${v.item} : ${v.reason}`).join("\n")
     );
   }

@@ -29,7 +29,7 @@ export const appRoutes = [
   { path: "/date/detail/:dmCd", element: <DateDetailPage /> },
   { path: "/date/detailCourse/:ddCd/:dmCd", element: <DateDetailCoursePage /> },
   { path: "/admin/meal/main", element: <MealMainPage /> },
-  { path: "/admin/meal/detail/:dmCd?", element: <MealDetailPage /> },
+  { path: "/admin/meal/detail/:mmCd?", element: <MealDetailPage /> },
   { path: "/admin/meal/rec", element: <MealRecPage /> },
 
   { path: "/admin/user/main", element: <UserMainPage /> },
