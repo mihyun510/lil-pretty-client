@@ -1,21 +1,19 @@
 import { apiInstance } from "../common/axiosInstance";
-import { CommonCodeItems, CommonCodeId } from "../interfaces/CommonCode";
+import { CommonCodeItems, CommonCodeId } from "../interfaces/AdminCommonCode";
 import {
   CommonResponse,
   CUDCommonResponse,
   CUDFailItem,
 } from "../interfaces/Common";
-export async function getCommCodeItems(
-  grpCd: string,
+/* ----------------공통코드  조회 ----------------- */
+export async function getAdminCommonCodeItems(
   grpNm: string
 ): Promise<CommonResponse<CommonCodeItems[]>> {
   try {
     const response = await apiInstance.post(
-      "/admin/commcode/main/getCommCodeItems",
-      {
-        grpCd,
-        grpNm,
-      }
+      "/admin/commcode/main/getAdminCommonCodeItems",
+
+      { cmGrpNm: grpNm }
     );
     if (response.data.ok && response.data.data) {
       return {
@@ -64,16 +62,15 @@ export async function deleteAdminCommCodeItems(
     };
   }
 }
-/* ----------------공통코드 추가 ----------------- */
-export async function insertAdminCommCodeItems(
-  newCommCodeItem: CommonCodeId[]
+/* ----------------공통코드 저장 ----------------- */
+export async function saveAdminCommCodeItems(
+  newCommCodeItem: CommonCodeItems[]
 ): Promise<CUDCommonResponse<CUDFailItem>> {
   try {
     const response = await apiInstance.post(
-      "/admin/commcode/main/insertAdminCommCodeItems",
-      {
-        newCommCodeItem,
-      }
+      "/admin/commcode/main/saveAdminCommCodeItems",
+
+      newCommCodeItem
     );
 
     return {
