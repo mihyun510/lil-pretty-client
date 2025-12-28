@@ -2,10 +2,6 @@ import {
   Box,
   Typography,
   Card,
-  CardMedia,
-  IconButton,
-  Grid,
-  colors,
   Button,
   CardContent,
   TableContainer,
@@ -14,32 +10,25 @@ import {
   TableRow,
   TableCell,
   TextField,
-  MenuItem,
-  Select,
   TableBody,
   Checkbox,
-  FormControl,
   Pagination,
-  InputLabel,
 } from "@mui/material";
-import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
-import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 
 import { useEffect, useState } from "react";
-import { CommonCodeItems, CommonCodeId } from "@/api/interfaces/CommonCode";
 import {
-  getCommCodeItems,
+  CommonCodeItems,
+  CommonCodeId,
+} from "@/api/interfaces/AdminCommonCode";
+import {
+  getAdminCommonCodeItems,
   deleteAdminCommCodeItems,
-  insertAdminCommCodeItems,
+  saveAdminCommCodeItems,
 } from "@/api/admin/commonCodeApi";
-import { useNavigate } from "react-router-dom";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import EditIcon from "@mui/icons-material/Edit";
+
 import { gfnGetCudResultMessage } from "@/lib/crudMessage";
 import styles from "./CommonCode.module.css";
 export default function CommonMainForm() {
-  const [grpCd, setgrpCd] = useState("");
-  const [dtCd, setdtCd] = useState("");
   const [grpNm, setgrpNm] = useState("");
   const [CommCode, setCommCode] = useState<CommonCodeItems[]>([]);
   const [selectedGrpCd, setSelectedGrpCd] = useState<string | null>(null);
@@ -54,60 +43,66 @@ export default function CommonMainForm() {
   const handleChangePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-
   /* ---------------- 추가 ----------------- */
   const addCommCodeItem = () => {
     const newRow: CommonCodeItems = {
       // 실제 DB 컬럼에 맞게 빈 값 설정
-      cm_grp_cd: "",
-      cm_dt_cd: "",
-      cm_grp_nm: "",
-      cm_grp_desc: "",
-      cm_dt_nm: "",
-      cm_dt_desc: "",
+      cmGrpCd: "",
+      cmDtCd: "",
+      cmGrpNm: "",
+      cmGrpDesc: "",
+      cmDtNm: "",
+      cmDtDesc: "",
     };
-    setCommCode([...CommCode, newRow]);
-  };
 
-  const saveItem = async () => {
-    const result = await insertAdminCommCodeItems(CommCode);
+    setPage(1);
+    setCommCode([newRow, ...CommCode]);
   };
+  /* ---------------- 조회---------------- */
+  // const getCommonCodeItems = async () => {
+  //   const result = await getAdminCommonCodeItems(grpNm);
+  //   if (result.ok && result.data) {
+  //     setCommCode(result.data); // result 전체가 아니라 result.data를 넣어야 함
+  //     setPage(1); // 조회 시 페이지를 1페이지로 초기화
+  //   }
+  // };
   /* ---------------- 삭제 ----------------- */
-  const [selectedgrpCdList, setselectedgrpCdList] = useState<CommonCodeId[]>(
-    []
-  );
+  const [selectedRows, setSelectedRows] = useState<CommonCodeItems[]>([]);
 
-  const handleCheckboxChange = (clickedItem: CommonCodeId) => {
+  const handleCheckboxChange = (row: CommonCodeItems) => {
     // 상태 Setter 함수를 사용하여 상태 업데이트
-    setselectedgrpCdList((prevSelectedIds) =>
+    setSelectedRows((prevSelectedIds) =>
       // 1. 선택 여부 확인: 복합키(두 필드)가 모두 일치하는 항목이 있는지 확인
       prevSelectedIds.some(
-        (item) =>
-          item.cm_grp_cd === clickedItem.cm_grp_cd &&
-          item.cm_dt_cd === clickedItem.cm_dt_cd
+        (item) => item.cmGrpCd === row.cmGrpCd && item.cmDtCd === row.cmDtCd
       )
         ? // 2. (TRUE: 이미 선택됨) 필터링으로 제거: 복합키가 일치하는 항목만 제외하고 새 배열 반환
           prevSelectedIds.filter(
-            (item) =>
-              item.cm_grp_cd !== clickedItem.cm_grp_cd ||
-              item.cm_dt_cd !== clickedItem.cm_dt_cd
+            (item) => item.cmGrpCd !== row.cmGrpCd || item.cmDtCd !== row.cmDtCd
           )
         : // 3. (FALSE: 선택 안 됨) 새 항목 추가: 기존 배열에 새 항목을 추가하여 새 배열 반환
-          [...prevSelectedIds, clickedItem]
+          [...prevSelectedIds, row]
     );
   };
   const handleDelete = async () => {
-    if (selectedgrpCdList.length === 0) {
-      alert("삭제할 식단을 선택해주세요.");
+    if (selectedRows.length === 0) {
+      alert("삭제할 공통코드를 선택해주세요.");
       return;
     }
-    if (!confirm("선택한 식단을 삭제하시겠습니까?")) return;
-
-    const result = await deleteAdminCommCodeItems(selectedgrpCdList);
+    if (!confirm("선택한 공통코드를 삭제하시겠습니까?")) return;
+    const idListOnly = selectedRows.map((row) => {
+      console.log("삭제 대상 그룹코드:", row.cmGrpCd);
+      console.log("삭제 대상 디테일:", row.cmDtCd);
+      return {
+        cmGrpCd: row.cmGrpCd,
+        cmDtCd: row.cmDtCd,
+      };
+    });
+    const result = await deleteAdminCommCodeItems(idListOnly);
 
     alert(gfnGetCudResultMessage(result));
 
-    setselectedgrpCdList([]);
+    setSelectedRows([]);
 
     // 현재 페이지 유지한 채 목록 재조회
     fetchCommCodeItems();
@@ -134,10 +129,10 @@ export default function CommonMainForm() {
   };
   const filteredDetailCodes = CommCode.filter((item) => {
     // selectedGrpCd가 null이 아니면서, 현재 항목의 cm_grp_cd와 일치하는 항목만 선택
-    return selectedGrpCd !== null && item.cm_grp_cd === selectedGrpCd;
+    return selectedGrpCd !== null && item.cmGrpCd === selectedGrpCd;
   });
   const fetchCommCodeItems = async () => {
-    const result = await getCommCodeItems(grpCd, grpNm);
+    const result = await getAdminCommonCodeItems(grpNm);
     if (result.ok && result.data) {
       setCommCode(result.data);
     } else {
@@ -146,12 +141,21 @@ export default function CommonMainForm() {
   };
   useEffect(() => {
     fetchCommCodeItems();
-  }, []);
-  const filteredCommCode = CommCode.filter((item) => {
-    const groupName = item.cm_grp_nm;
-
-    return groupName.startsWith(grpNm);
-  });
+  }, [grpNm]);
+  /* ---------------- 저장 ----------------- */
+  const saveItems = async () => {
+    if (selectedRows.length === 0) {
+      alert("저장할 공통코드를 선택해주세요.");
+      return;
+    }
+    if (!confirm("선택한 공통코드를 저장하시겠습니까?")) return;
+    const result = await saveAdminCommCodeItems(selectedRows);
+    if (gfnGetCudResultMessage(result) == "Success") {
+      alert("저장이 완료되었습니다.");
+    }
+    setSelectedRows([]);
+    fetchCommCodeItems();
+  };
   return (
     <Box sx={{ p: 4, backgroundColor: "#fdecef", minHeight: "100vh" }}>
       <Box>
@@ -168,7 +172,7 @@ export default function CommonMainForm() {
         >
           <TextField
             id="outlined-basic"
-            label="그룹코드 명"
+            label="공통코드 명"
             variant="outlined"
             value={grpNm}
             onChange={grpNmChange}
@@ -187,14 +191,23 @@ export default function CommonMainForm() {
               mb={1}
             ></Box>
             <Box display={"flex"} gap={1} mb={1} justifyContent={"end"} mr={0}>
+              {/* <Button
+                className={styles.CommButton}
+                onClick={getCommonCodeItems}
+              >
+                조회
+              </Button> */}
               <Button className={styles.CommButton} onClick={addCommCodeItem}>
                 추가
               </Button>
               <Button onClick={handleDelete} className={styles.CommButton}>
                 삭제
               </Button>
-              <Button className={styles.CommButton}>저장</Button>
+              <Button className={styles.CommButton} onClick={saveItems}>
+                저장
+              </Button>
             </Box>
+            <div></div>
             {/* Table */}
             <Card
               sx={{
@@ -220,35 +233,30 @@ export default function CommonMainForm() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {filteredCommCode.map((row, index) => (
+                      {paginatedCommonCode.map((row, index) => (
                         <TableRow key={index}>
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell align="center">
                             <Checkbox
                               color="secondary"
-                              checked={selectedgrpCdList.some(
+                              checked={selectedRows.some(
                                 (item) =>
-                                  item.cm_grp_cd === row.cm_grp_cd &&
-                                  item.cm_dt_cd === row.cm_dt_cd
+                                  item.cmGrpCd === row.cmGrpCd &&
+                                  item.cmDtCd === row.cmDtCd
                               )}
-                              onChange={() =>
-                                handleCheckboxChange({
-                                  cm_grp_cd: row.cm_grp_cd, // 현재 행의 그룹 코드
-                                  cm_dt_cd: row.cm_dt_cd, // 현재 행의 상세 코드
-                                })
-                              }
+                              onChange={() => handleCheckboxChange(row)}
                             ></Checkbox>
                           </TableCell>
                           <TableCell align="center">
                             <Box>
                               <TextField
-                                onClick={() => setSelectedGrpCd(row.cm_grp_cd)} //
+                                onClick={() => setSelectedGrpCd(row.cmGrpCd)} //
                                 size="small"
-                                value={row.cm_grp_cd}
+                                value={row.cmGrpCd}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
-                                    "cm_grp_cd",
+                                    "cmGrpCd",
                                     event.target.value
                                   );
                                 }}
@@ -260,11 +268,11 @@ export default function CommonMainForm() {
                             <Box>
                               <TextField
                                 size="small"
-                                value={row.cm_grp_nm}
+                                value={row.cmGrpNm}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
-                                    "cm_grp_nm",
+                                    "cmGrpNm",
                                     event.target.value
                                   );
                                 }}
@@ -272,16 +280,16 @@ export default function CommonMainForm() {
                             </Box>
                           </TableCell>
 
-                          <TableCell align="center">{row.cm_dt_cd}</TableCell>
+                          <TableCell align="center">{row.cmDtCd}</TableCell>
                           <TableCell align="center">
                             <Box>
                               <TextField
                                 size="small"
-                                value={row.cm_dt_nm}
+                                value={row.cmDtNm}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
-                                    "cm_dt_nm",
+                                    "cmDtNm",
                                     event.target.value
                                   );
                                 }}
@@ -292,11 +300,11 @@ export default function CommonMainForm() {
                             <Box>
                               <TextField
                                 size="small"
-                                value={row.cm_dt_desc}
+                                value={row.cmDtDesc}
                                 onChange={(event) => {
                                   handleChange(
                                     index,
-                                    "cm_dt_desc",
+                                    "cmDtDesc",
                                     event.target.value
                                   );
                                 }}
