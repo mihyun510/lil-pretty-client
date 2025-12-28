@@ -42,9 +42,8 @@ export async function deleteAdminCommCodeItems(
   try {
     const response = await apiInstance.post(
       "/admin/commcode/main/deleteAdminCommCodeItems",
-      {
-        grpCdList,
-      }
+
+      grpCdList
     );
 
     return {

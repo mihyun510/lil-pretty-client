@@ -58,7 +58,14 @@ export default function CommonMainForm() {
     setPage(1);
     setCommCode([newRow, ...CommCode]);
   };
-
+  /* ---------------- 조회---------------- */
+  // const getCommonCodeItems = async () => {
+  //   const result = await getAdminCommonCodeItems(grpNm);
+  //   if (result.ok && result.data) {
+  //     setCommCode(result.data); // result 전체가 아니라 result.data를 넣어야 함
+  //     setPage(1); // 조회 시 페이지를 1페이지로 초기화
+  //   }
+  // };
   /* ---------------- 삭제 ----------------- */
   const [selectedRows, setSelectedRows] = useState<CommonCodeItems[]>([]);
 
@@ -83,10 +90,14 @@ export default function CommonMainForm() {
       return;
     }
     if (!confirm("선택한 공통코드를 삭제하시겠습니까?")) return;
-    const idListOnly = selectedRows.map((row) => ({
-      cmGrpCd: row.cmGrpCd,
-      cmDtCd: row.cmDtCd,
-    }));
+    const idListOnly = selectedRows.map((row) => {
+      console.log("삭제 대상 그룹코드:", row.cmGrpCd);
+      console.log("삭제 대상 디테일:", row.cmDtCd);
+      return {
+        cmGrpCd: row.cmGrpCd,
+        cmDtCd: row.cmDtCd,
+      };
+    });
     const result = await deleteAdminCommCodeItems(idListOnly);
 
     alert(gfnGetCudResultMessage(result));
@@ -130,7 +141,7 @@ export default function CommonMainForm() {
   };
   useEffect(() => {
     fetchCommCodeItems();
-  }, []);
+  }, [grpNm]);
   /* ---------------- 저장 ----------------- */
   const saveItems = async () => {
     if (selectedRows.length === 0) {
@@ -161,7 +172,7 @@ export default function CommonMainForm() {
         >
           <TextField
             id="outlined-basic"
-            label="그룹코드 명"
+            label="공통코드 명"
             variant="outlined"
             value={grpNm}
             onChange={grpNmChange}
@@ -180,6 +191,12 @@ export default function CommonMainForm() {
               mb={1}
             ></Box>
             <Box display={"flex"} gap={1} mb={1} justifyContent={"end"} mr={0}>
+              {/* <Button
+                className={styles.CommButton}
+                onClick={getCommonCodeItems}
+              >
+                조회
+              </Button> */}
               <Button className={styles.CommButton} onClick={addCommCodeItem}>
                 추가
               </Button>
@@ -190,6 +207,7 @@ export default function CommonMainForm() {
                 저장
               </Button>
             </Box>
+            <div></div>
             {/* Table */}
             <Card
               sx={{
