@@ -6,14 +6,42 @@ import {
   CUDFailItem,
 } from "../interfaces/Common";
 /* ----------------공통코드  조회 ----------------- */
-export async function getAdminCommonCodeItems(
-  grpNm: string
+export async function getAdminGroupCode(): Promise<
+  CommonResponse<CommonCodeItems[]>
+> {
+  try {
+    const response = await apiInstance.get(
+      "/admin/commcode/main/getAdminGroupCode"
+    );
+    if (response.data.ok && response.data.data) {
+      return {
+        data: response.data.data,
+        ok: response.data.ok,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        ok: false,
+        message: response.data.message || "데이터를 불러올 수 없습니다.",
+      };
+    }
+  } catch (error) {
+    console.error("getMst Error:", error);
+    return {
+      ok: false,
+      message: "서버 오류 또는 네트워크 문제로 데이터를 불러오지 못했습니다.",
+    };
+  }
+}
+/* ----------------상세코드 조회 ----------------- */
+export async function getAdminDetailCode(
+  grpCd: string
 ): Promise<CommonResponse<CommonCodeItems[]>> {
   try {
     const response = await apiInstance.post(
-      "/admin/commcode/main/getAdminCommonCodeItems",
+      "/admin/commcode/main/getAdminDetailCode",
 
-      { cmGrpNm: grpNm }
+      { cmGrpCd: grpCd }
     );
     if (response.data.ok && response.data.data) {
       return {
@@ -36,12 +64,12 @@ export async function getAdminCommonCodeItems(
   }
 }
 /* ----------------공통코드 삭제 ----------------- */
-export async function deleteAdminCommCodeItems(
+export async function deleteAdminCommonCode(
   grpCdList: CommonCodeId[]
 ): Promise<CUDCommonResponse<CUDFailItem>> {
   try {
     const response = await apiInstance.post(
-      "/admin/commcode/main/deleteAdminCommCodeItems",
+      "/admin/commcode/main/deleteAdminCommonCode",
 
       grpCdList
     );
@@ -53,7 +81,7 @@ export async function deleteAdminCommCodeItems(
       message: response.data.message,
     };
   } catch (error) {
-    console.error("deleteAdminCommCodeItems Error:", error);
+    console.error("deleteAdminCommonCode Error:", error);
     return {
       successCount: 0,
       failCount: grpCdList.length,
@@ -62,12 +90,12 @@ export async function deleteAdminCommCodeItems(
   }
 }
 /* ----------------공통코드 저장 ----------------- */
-export async function saveAdminCommCodeItems(
+export async function saveAdminCommonCode(
   newCommCodeItem: CommonCodeItems[]
 ): Promise<CUDCommonResponse<CUDFailItem>> {
   try {
     const response = await apiInstance.post(
-      "/admin/commcode/main/saveAdminCommCodeItems",
+      "/admin/commcode/main/saveAdminCommonCode",
 
       newCommCodeItem
     );
