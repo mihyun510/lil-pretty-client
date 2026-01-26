@@ -1,9 +1,9 @@
 import {
   getDateCourse,
-  updateDateCourse,
+  updateDateCourse, // saveTotalDateCourse와 동일한 역할을 하도록 수정 필요
   getDateCourseDetailItems,
   deleteDateCourse,
-  deleteDetailDateCourse, // 상세 삭제 API 추가
+  deleteDetailDateCourse,
 } from "@/api/admin/dateMainApi";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
 import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
@@ -56,26 +56,22 @@ export default function DateMainForm() {
 
   const FetchDetailDateCourse = async (targetDdCd: string) => {
     if (!targetDdCd) return;
-    if (ddCd === targetDdCd) {
-      setDdCd("");
-      SetDetailDateCourse([]);
-    } else {
-      setDdCd(targetDdCd);
-      const response = await getDateCourseDetailItems(targetDdCd);
-      SetDetailDateCourse(
-        response.ok && Array.isArray(response.data) ? response.data : [],
-      );
-    }
+
+    setDdCd(targetDdCd);
+    const response = await getDateCourseDetailItems(targetDdCd);
+    SetDetailDateCourse(
+      response.ok && Array.isArray(response.data) ? response.data : [],
+    );
   };
 
   const onaddRow = () => {
     const newRow: DateDtlItems = {
-      dd_cd: "",
+      dd_cd: `NEW_${Date.now()}`, // 신규 행 구분용 임시 ID
       dd_title: "",
       dd_img: "",
       dd_desc: "",
     };
-    setDdCd("");
+    setDdCd(newRow.dd_cd);
     SetDetailDateCourse([]);
     SetDateCourse((prev) => [...(Array.isArray(prev) ? prev : []), newRow]);
   };
@@ -100,11 +96,9 @@ export default function DateMainForm() {
     );
   };
 
-  // 🚩 상세 코스 삭제 로직 (DB 연동)
   const onDeleteDetail = async (index: number, dcCd: string) => {
     if (!confirm("이 상세 코스 항목을 영구 삭제하시겠습니까?")) return;
 
-    // 만약 dc_cd가 존재하고 신규 데이터(NEW_)가 아니라면 DB 삭제 요청
     if (dcCd && !dcCd.startsWith("NEW")) {
       const res = await deleteDetailDateCourse(dcCd);
       if (!res?.ok) {
@@ -113,25 +107,36 @@ export default function DateMainForm() {
       }
     }
 
-    // UI에서 제거
     SetDetailDateCourse((prev) => prev.filter((_, i) => i !== index));
     if (dcCd && !dcCd.startsWith("NEW")) alert("삭제되었습니다.");
   };
-
   const onUpdate = async () => {
     if (!dmCd) return alert("유형을 선택해주세요.");
-    if (!ddCd) return alert("저장할 코스를 선택(체크)해주세요.");
-    const selectedCourse = DateCourse.filter((item) => item.dd_cd === ddCd);
-    if (selectedCourse.length === 0) {
-      alert("선택된 데이터가 없습니다.");
-      return;
-    }
-    const res = await updateDateCourse(dmCd, selectedCourse);
+    if (!ddCd) return alert("저장할 코스를 선택(클릭)해주세요.");
+
+    // 1. 현재 선택된 부모(ddCd)를 찾아서 그 안에 오른쪽 그리드(DetailDateCourse)를 넣어줌
+    const finalData = DateCourse.map((item) => {
+      if (item.dd_cd === ddCd) {
+        // 현재 선택된 부모 행인 경우
+        return {
+          ...item,
+          detailList: DetailDateCourse, // 이 키값이 백엔드 course.get("detailList")와 맞아야 함
+        };
+      }
+      // 선택되지 않은 다른 행들은 원래 자식 정보가 있다면 유지하거나 빈 배열
+      return { ...item, detailList: item.detailList || [] };
+    });
+
+    console.log("전송 데이터 확인:", finalData);
+
+    // 2. 서버 전송
+    const res = await updateDateCourse(dmCd, finalData);
+
     if (res?.ok) {
-      alert("저장되었습니다.");
+      alert("상세 정보까지 모두 저장되었습니다.");
       FetchDateCourse(dmCd);
     } else {
-      alert("저장에 실패했습니다.");
+      alert(res?.message || "저장에 실패했습니다.");
     }
   };
 
@@ -249,9 +254,7 @@ export default function DateMainForm() {
                   <TableRow
                     key={index}
                     hover
-                    onClick={() =>
-                      item.dd_cd && FetchDetailDateCourse(item.dd_cd)
-                    }
+                    onClick={() => FetchDetailDateCourse(item.dd_cd || "")}
                     selected={ddCd === item.dd_cd}
                     sx={{
                       cursor: "pointer",
@@ -306,6 +309,7 @@ export default function DateMainForm() {
           </Paper>
         </Box>
 
+        {/* 오른쪽 상세 영역 */}
         <Box
           sx={{
             width: "400px",
@@ -325,14 +329,14 @@ export default function DateMainForm() {
               gap: 2,
             }}
           >
-            {DetailDateCourse.length === 0 && (
+            {(!ddCd || DetailDateCourse.length === 0) && (
               <Typography
                 variant="body2"
                 color="grey"
                 textAlign="center"
                 mt={4}
               >
-                목록에서 코스를 선택해 주세요.
+                목록에서 코스를 선택하거나 상세 항목을 추가해 주세요.
               </Typography>
             )}
 
@@ -346,17 +350,16 @@ export default function DateMainForm() {
                   position: "relative",
                 }}
               >
-                {/* 🚩 상세 개별 삭제 버튼 */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDeleteDetail(index, item.dc_cd);
+                    onDeleteDetail(index, item.dc_cd || "");
                   }}
                   style={{
                     position: "absolute",
                     top: "8px",
                     right: "8px",
-                    background: "#ff4d4f",
+                    background: "#f29bb8",
                     color: "white",
                     border: "none",
                     borderRadius: "4px",
@@ -372,7 +375,6 @@ export default function DateMainForm() {
                 >
                   ×
                 </button>
-
                 <Box display={"flex"} p={1}>
                   <CardMedia
                     sx={{

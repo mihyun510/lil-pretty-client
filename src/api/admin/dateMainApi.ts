@@ -201,7 +201,7 @@ export async function deleteDetailDateCourse(dcCd: string) {
 }
 export async function saveTotalDateCourse(
   dmCd: string,
-  dateCourseList: any[], // 상세 리스트(detailList)가 포함된 배열
+  dateCourseList: any[], // 상세 정보(detailList)가 포함된 배열
 ): Promise<CommonResponse<any>> {
   try {
     const response = await apiInstance.post("/date/manager/saveDateCourse", {
@@ -211,6 +211,6 @@ export async function saveTotalDateCourse(
     return response.data;
   } catch (error) {
     console.error("Save Error:", error);
-    return { ok: false, message: "저장 중 오류가 발생했습니다." };
+    return { ok: false, message: "저장 중 네트워크 오류가 발생했습니다." };
   }
 }
