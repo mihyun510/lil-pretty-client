@@ -1,14 +1,12 @@
 import {
   getDateCourse,
-  updateDateCourse,
-  getDetailDateCourse,
+  updateDateCourse, // saveTotalDateCourse와 동일한 역할을 하도록 수정 필요
+  getDateCourseDetailItems,
   deleteDateCourse,
   deleteDetailDateCourse,
 } from "@/api/admin/dateMainApi";
 import { DateDtlItems } from "@/api/interfaces/DateDtl";
 import { DateDtlCourse } from "@/api/interfaces/DateDtlCourse";
-import { useNavigate } from "react-router-dom";
-import { CommonResponse } from "@/api/interfaces/Common";
 import {
   Box,
   Typography,
@@ -20,26 +18,29 @@ import {
   TableBody,
   TextField,
   Checkbox,
-  Grid,
   Card,
-  CardMedia,
   CardContent,
+  CardMedia,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function DateMainForm() {
   const [DateCourse, SetDateCourse] = useState<DateDtlItems[]>([]);
   const [DetailDateCourse, SetDetailDateCourse] = useState<DateDtlCourse[]>([]);
   const [dmCd, setDmCd] = useState("");
-  const [ddCd, setDdCd] = useState(""); // 현재 선택된 데이트 코스 코드
+  const [ddCd, setDdCd] = useState("");
+  const lastRowInputRef = useRef<HTMLInputElement | null>(null);
 
   const FetchDateCourse = async (targetDmCd: string) => {
-    if (!targetDmCd) return;
-    const response: CommonResponse<DateDtlItems[]> = await getDateCourse(
-      targetDmCd
-    );
-    if (response.ok && response.data) {
+    if (!targetDmCd) {
+      SetDateCourse([]);
+      return;
+    }
+    const response = await getDateCourse(targetDmCd);
+    if (response.ok && Array.isArray(response.data)) {
       SetDateCourse(response.data);
+    } else {
+      SetDateCourse([]);
     }
   };
 
@@ -47,83 +48,121 @@ export default function DateMainForm() {
     FetchDateCourse(dmCd);
   }, [dmCd]);
 
+  useEffect(() => {
+    if (DateCourse.length > 0 && lastRowInputRef.current) {
+      setTimeout(() => lastRowInputRef.current?.focus(), 10);
+    }
+  }, [DateCourse.length]);
+
   const FetchDetailDateCourse = async (targetDdCd: string) => {
     if (!targetDdCd) return;
-    setDdCd(targetDdCd); // 현재 보고 있는 상세 코드 업데이트
-    const response: CommonResponse<DateDtlCourse[]> = await getDetailDateCourse(
-      targetDdCd
+
+    setDdCd(targetDdCd);
+    const response = await getDateCourseDetailItems(targetDdCd);
+    SetDetailDateCourse(
+      response.ok && Array.isArray(response.data) ? response.data : [],
     );
-    if (response.ok && response.data) {
-      SetDetailDateCourse(response.data);
-    } else {
-      SetDetailDateCourse([]);
-    }
   };
 
   const onaddRow = () => {
     const newRow: DateDtlItems = {
-      dd_cd: "",
+      dd_cd: `NEW_${Date.now()}`, // 신규 행 구분용 임시 ID
       dd_title: "",
       dd_img: "",
       dd_desc: "",
     };
-    SetDateCourse((prevCourse) => [...prevCourse, newRow]);
-  };
-
-  const onDelete = async () => {
-    if (!ddCd) return alert("삭제할 행의 체크박스를 선택해주세요.");
-    if (!confirm("정말 삭제하시겠습니까?")) return;
-
-    const deleteResponse = await deleteDateCourse(ddCd);
-    if (deleteResponse.ok) {
-      alert("삭제되었습니다.");
-      FetchDateCourse(dmCd);
-      SetDetailDateCourse([]); // 삭제 후 상세 리스트 초기화
-      setDdCd("");
-    }
-  };
-
-  // 상세 카드 삭제 로직 수정 (dcCd를 인자로 직접 받음)
-  const handleDetailDelete = async (targetDcCd: string) => {
-    if (!confirm("해당 상세 코스를 삭제하시겠습니까?")) return;
-    const deleteResponse = await deleteDetailDateCourse(targetDcCd);
-    if (deleteResponse.ok) {
-      alert("삭제되었습니다.");
-      FetchDetailDateCourse(ddCd); // 현재 ddCd 기반으로 재조회
-    }
-  };
-
-  const onUpdate = async () => {
-    if (!dmCd) return alert("유형을 선택해주세요.");
-    await updateDateCourse(dmCd, DateCourse);
-    alert("저장되었습니다.");
+    setDdCd(newRow.dd_cd);
+    SetDetailDateCourse([]);
+    SetDateCourse((prev) => [...(Array.isArray(prev) ? prev : []), newRow]);
   };
 
   const handleChange = (
     index: number,
     field: keyof DateDtlItems,
-    value: string
+    value: string,
   ) => {
-    SetDateCourse((prevCourse) =>
-      prevCourse.map((item, i) =>
-        i === index ? { ...item, [field]: value } : item
-      )
+    SetDateCourse((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
     );
   };
 
-  const headers = [
-    { value: "check", text: "선택" },
-    { value: "dd_cd", text: "순번" },
-    { value: "dd_title", text: "데이트 제목" },
-    { value: "dd_img", text: "이미지" },
-    { value: "dd_desc", text: "설명" },
-  ];
-  const ButtonStyle = {
+  const handleChangeDetail = (
+    index: number,
+    field: keyof DateDtlCourse,
+    value: any,
+  ) => {
+    SetDetailDateCourse((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    );
+  };
+
+  const onDeleteDetail = async (index: number, dcCd: string) => {
+    if (!confirm("이 상세 코스 항목을 영구 삭제하시겠습니까?")) return;
+
+    if (dcCd && !dcCd.startsWith("NEW")) {
+      const res = await deleteDetailDateCourse(dcCd);
+      if (!res?.ok) {
+        alert("DB 삭제에 실패했습니다.");
+        return;
+      }
+    }
+
+    SetDetailDateCourse((prev) => prev.filter((_, i) => i !== index));
+    if (dcCd && !dcCd.startsWith("NEW")) alert("삭제되었습니다.");
+  };
+  const onUpdate = async () => {
+    if (!dmCd) return alert("유형을 선택해주세요.");
+    if (!ddCd) return alert("저장할 코스를 선택(클릭)해주세요.");
+
+    // 1. 현재 선택된 부모(ddCd)를 찾아서 그 안에 오른쪽 그리드(DetailDateCourse)를 넣어줌
+    const finalData = DateCourse.map((item) => {
+      if (item.dd_cd === ddCd) {
+        // 현재 선택된 부모 행인 경우
+        return {
+          ...item,
+          detailList: DetailDateCourse, // 이 키값이 백엔드 course.get("detailList")와 맞아야 함
+        };
+      }
+      // 선택되지 않은 다른 행들은 원래 자식 정보가 있다면 유지하거나 빈 배열
+      return { ...item, detailList: item.detailList || [] };
+    });
+
+    console.log("전송 데이터 확인:", finalData);
+
+    // 2. 서버 전송
+    const res = await updateDateCourse(dmCd, finalData);
+
+    if (res?.ok) {
+      alert("상세 정보까지 모두 저장되었습니다.");
+      FetchDateCourse(dmCd);
+    } else {
+      alert(res?.message || "저장에 실패했습니다.");
+    }
+  };
+
+  const onDelete = async () => {
+    if (!ddCd) return alert("삭제할 행을 선택해주세요.");
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    const res = await deleteDateCourse(ddCd);
+    if (res?.ok) {
+      alert("삭제되었습니다.");
+      FetchDateCourse(dmCd);
+      SetDetailDateCourse([]);
+      setDdCd("");
+    }
+  };
+
+  const buttonStyle = {
     backgroundColor: "#f29bb8",
     color: "white",
     borderRadius: "8px",
-    "&:hover": { backgroundColor: "#d87a99" },
+    padding: "6px 14px",
+    cursor: "pointer",
+    border: "none",
+    fontSize: "13px",
+    fontWeight: "bold",
   };
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography
@@ -133,16 +172,15 @@ export default function DateMainForm() {
       </Typography>
 
       <Box display={"flex"} alignItems="center" mb={3}>
-        <Typography sx={{ fontSize: "20px", ml: 3, fontWeight: "bold", mr: 2 }}>
+        <Typography sx={{ fontSize: "18px", ml: 1, fontWeight: "bold", mr: 2 }}>
           데이트 유형
         </Typography>
         <select
           style={{
-            color: "black",
-            backgroundColor: "white",
             padding: "8px",
             border: "2px solid pink",
             borderRadius: "10px",
+            outline: "none",
           }}
           onChange={(e) => setDmCd(e.target.value)}
           value={dmCd}
@@ -154,201 +192,279 @@ export default function DateMainForm() {
         </select>
       </Box>
 
-      <Box
-        display={"flex"}
-        justifyContent="space-between"
-        alignItems="center"
-        mb={1}
-        ml={2}
-      >
-        <Typography sx={{ fontWeight: "bold" }}>데이트 코스</Typography>
-        <Box display="flex" gap={1}>
-          <button
-            style={{
-              backgroundColor: "#f29bb8",
-              color: "white",
-              borderRadius: "8px",
-            }}
-            onClick={onaddRow}
+      <Box display={"flex"} gap={3} alignItems="flex-start">
+        <Box sx={{ flex: 1 }}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="flex-end"
+            mb={1}
           >
-            행 추가
-          </button>
-          <button
-            style={{
-              backgroundColor: "#f29bb8",
-              color: "white",
+            <Typography sx={{ fontWeight: "bold", ml: 1, color: "#555" }}>
+              데이트 코스 목록
+            </Typography>
+            <Box display="flex" gap={1}>
+              <button style={buttonStyle} onClick={onaddRow}>
+                행 추가
+              </button>
+              <button style={buttonStyle} onClick={onDelete}>
+                행 삭제
+              </button>
+              <button style={buttonStyle} onClick={onUpdate}>
+                저장
+              </button>
+            </Box>
+          </Box>
+          <Paper
+            sx={{
+              border: 2,
+              borderColor: "pink",
               borderRadius: "8px",
-              padding: "5px 15px",
-              cursor: "pointer",
+              overflow: "hidden",
             }}
-            onClick={onDelete}
           >
-            행 삭제
-          </button>
-          <button
-            style={{
-              backgroundColor: "#f29bb8",
-              color: "white",
-              borderRadius: "8px",
-              padding: "5px 15px",
-              cursor: "pointer",
-            }}
-            onClick={onUpdate}
-          >
-            저장
-          </button>
-        </Box>
-      </Box>
-
-      <Box display={"flex"} gap={3} ml={2}>
-        <Paper sx={{ flex: 1, border: 2, borderColor: "pink" }}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                {headers.map((header) => (
+            <Table size="small">
+              <TableHead sx={{ backgroundColor: "#fff5f7" }}>
+                <TableRow>
                   <TableCell
-                    key={header.value}
-                    sx={{ fontWeight: "bold", textAlign: "center" }}
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "60px" }}
                   >
-                    {header.text}
+                    선택
                   </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {DateCourse.map((item, index) => (
-                <TableRow
-                  key={index}
-                  selected={ddCd === item.dd_cd}
-                  sx={{ "&.Mui-selected": { backgroundColor: "#fff0f3" } }}
-                >
-                  <TableCell align="center">
-                    <Checkbox
-                      checked={ddCd === item.dd_cd}
-                      onChange={() => FetchDetailDateCourse(item.dd_cd)}
-                    />
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "60px" }}
+                  >
+                    순번
                   </TableCell>
-                  <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell>
-                    <TextField
-                      size="small"
-                      fullWidth
-                      onChange={(e) =>
-                        handleChange(index, "dd_title", e.target.value)
-                      }
-                      value={item.dd_title}
-                    />
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                    데이트 제목
                   </TableCell>
-                  <TableCell>
-                    <TextField
-                      size="small"
-                      fullWidth
-                      placeholder="클릭 시 상세조회"
-                      onChange={(e) =>
-                        handleChange(index, "dd_img", e.target.value)
-                      }
-                      value={item.dd_img}
-                      onClick={() =>
-                        item.dd_cd && FetchDetailDateCourse(item.dd_cd)
-                      }
-                    />
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                    이미지 경로
                   </TableCell>
-                  <TableCell>
-                    <TextField
-                      size="small"
-                      fullWidth
-                      onChange={(e) =>
-                        handleChange(index, "dd_desc", e.target.value)
-                      }
-                      value={item.dd_desc}
-                    />
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                    설명
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {DateCourse.map((item, index) => (
+                  <TableRow
+                    key={index}
+                    hover
+                    onClick={() => FetchDetailDateCourse(item.dd_cd || "")}
+                    selected={ddCd === item.dd_cd}
+                    sx={{
+                      cursor: "pointer",
+                      "&.Mui-selected": {
+                        backgroundColor: "#fff0f3 !important",
+                      },
+                    }}
+                  >
+                    <TableCell align="center">
+                      <Checkbox checked={ddCd === item.dd_cd} size="small" />
+                    </TableCell>
+                    <TableCell align="center">{index + 1}</TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        value={item.dd_title || ""}
+                        onChange={(e) =>
+                          handleChange(index, "dd_title", e.target.value)
+                        }
+                        inputRef={
+                          index === DateCourse.length - 1
+                            ? lastRowInputRef
+                            : null
+                        }
+                      />
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        value={item.dd_img || ""}
+                        onChange={(e) =>
+                          handleChange(index, "dd_img", e.target.value)
+                        }
+                      />
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        value={item.dd_desc || ""}
+                        onChange={(e) =>
+                          handleChange(index, "dd_desc", e.target.value)
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Box>
 
+        {/* 오른쪽 상세 영역 */}
         <Box
           sx={{
             width: "400px",
+            minWidth: "400px",
             display: "flex",
             flexDirection: "column",
             gap: 2,
           }}
         >
-          <Typography variant="subtitle2" color="secondary">
-            상세 코스 정보
-          </Typography>
-          {DetailDateCourse.length === 0 && (
-            <Typography variant="body2" color="grey">
-              코스를 선택하면 상세 정보가 표시됩니다.
-            </Typography>
-          )}
-          {DetailDateCourse.map((item, index) => (
-            <Card
-              key={index}
-              sx={{ border: 1, borderColor: "pink", position: "relative" }}
-            >
-              <Box display={"flex"} p={1}>
-                <CardMedia
-                  sx={{
-                    width: 80,
+          <Box
+            sx={{
+              maxHeight: "70vh",
+              overflowY: "auto",
+              pr: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {(!ddCd || DetailDateCourse.length === 0) && (
+              <Typography
+                variant="body2"
+                color="grey"
+                textAlign="center"
+                mt={4}
+              >
+                목록에서 코스를 선택하거나 상세 항목을 추가해 주세요.
+              </Typography>
+            )}
+
+            {DetailDateCourse.map((item, index) => (
+              <Card
+                key={index}
+                sx={{
+                  border: 1,
+                  borderColor: "pink",
+                  boxShadow: "none",
+                  position: "relative",
+                }}
+              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteDetail(index, item.dc_cd || "");
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    right: "8px",
+                    background: "#f29bb8",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
+                    fontSize: "14px",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
                     alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 10,
                   }}
                 >
-                  <Typography variant="caption">No Image</Typography>
-                  <button style={{ fontSize: "10px", marginTop: "5px" }}>
-                    이미지 등록
-                  </button>
-                </CardMedia>
-                <CardContent sx={{ flex: 1, pt: 1 }}>
-                  <button
-                    style={{
-                      position: "absolute",
-                      top: 5,
-                      right: 5,
-                      cursor: "pointer",
+                  ×
+                </button>
+                <Box display={"flex"} p={1}>
+                  <CardMedia
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      bgcolor: "#f9f9f9",
+                      borderRadius: "4px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    onClick={() => handleDetailDelete(item.dc_cd)}
                   >
-                    x
-                  </button>
-                  <Box sx={{ mb: 1 }}>
-                    <Typography variant="body2" fontWeight="bold">
-                      제목: {item.dc_title}
+                    <Typography variant="caption" sx={{ fontSize: "10px" }}>
+                      No Image
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {item.dc_desc}
-                    </Typography>
-                  </Box>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    <Typography variant="caption">가격:</Typography>
-                    <input
-                      type="text"
-                      style={{ width: "60px" }}
-                      defaultValue={item.dc_price || 0}
+                  </CardMedia>
+                  <CardContent
+                    sx={{ flex: 1, pt: 0, pb: "8px !important", pl: 2, pr: 3 }}
+                  >
+                    <TextField
+                      variant="standard"
+                      placeholder="상세 제목"
+                      fullWidth
+                      value={item.dc_title || ""}
+                      onChange={(e) =>
+                        handleChangeDetail(index, "dc_title", e.target.value)
+                      }
                     />
-                  </Box>
-                </CardContent>
-              </Box>
-            </Card>
-          ))}
-          {ddCd && (
-            <button
-              style={{
-                padding: "10px",
-                border: "1px dashed pink",
-                borderRadius: "8px",
-                cursor: "pointer",
-              }}
-            >
-              + 상세 코스 추가
-            </button>
-          )}
+                    <TextField
+                      variant="standard"
+                      placeholder="설명"
+                      fullWidth
+                      multiline
+                      value={item.dc_desc || ""}
+                      onChange={(e) =>
+                        handleChangeDetail(index, "dc_desc", e.target.value)
+                      }
+                    />
+                    <Box display="flex" alignItems="center" gap={1} mt={1}>
+                      <Typography variant="caption">가격:</Typography>
+                      <input
+                        type="number"
+                        style={{
+                          width: "80px",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                        }}
+                        value={item.dc_price || 0}
+                        onChange={(e) =>
+                          handleChangeDetail(
+                            index,
+                            "dc_price",
+                            Number(e.target.value),
+                          )
+                        }
+                      />
+                    </Box>
+                  </CardContent>
+                </Box>
+              </Card>
+            ))}
+
+            {ddCd && (
+              <button
+                style={{
+                  padding: "10px",
+                  border: "1px dashed pink",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  backgroundColor: "#fff5f7",
+                  color: "#f29bb8",
+                  fontWeight: "bold",
+                }}
+                onClick={() =>
+                  SetDetailDateCourse([
+                    ...DetailDateCourse,
+                    {
+                      dc_cd: `NEW_${Date.now()}`,
+                      dd_cd: ddCd,
+                      dc_title: "",
+                      dc_desc: "",
+                      dc_price: 0,
+                    },
+                  ])
+                }
+              >
+                + 상세 코스 추가
+              </button>
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>
